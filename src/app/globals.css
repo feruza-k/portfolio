@@ -1,3 +1,111 @@
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-display: "";
+    --font-mono: "";
+    --font-body: "";
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-white text-ink font-body;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  h1, h2, h3 {
+    @apply font-display;
+    line-height: 1.15;
+  }
+
+  /* Section number labels */
+  .section-label {
+    @apply font-mono text-[11px] text-muted uppercase tracking-[0.14em];
+  }
+
+  /* Divider */
+  .section-divider {
+    @apply border-t border-faint;
+  }
+
+  /* Prose for notes */
+  .prose-note {
+    @apply font-body text-[15px] leading-relaxed text-secondary;
+  }
+
+  .prose-note h1,
+  .prose-note h2,
+  .prose-note h3 {
+    @apply font-display text-ink;
+  }
+
+  .prose-note p {
+    @apply mb-4;
+  }
+
+  .prose-note code {
+    @apply font-mono text-[13px] bg-subtle px-1.5 py-0.5;
+  }
+
+  .prose-note pre {
+    @apply font-mono text-[13px] bg-subtle p-4 overflow-x-auto my-4;
+  }
+
+  .prose-note a {
+    @apply underline underline-offset-2;
+  }
+
+  .prose-note ul {
+    @apply list-disc pl-5 mb-4 space-y-1;
+  }
+
+  .prose-note ol {
+    @apply list-decimal pl-5 mb-4 space-y-1;
+  }
+
+  .prose-note blockquote {
+    @apply border-l border-faint pl-4 text-muted italic my-4;
+  }
+}
+
+@layer utilities {
+  /* Map pulse animation */
+  @keyframes heat-pulse {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(1.25); }
+  }
+
+  /* Waveform bar animation */
+  @keyframes wave-bar {
+    0%, 100% { transform: scaleY(0.3); }
+    50% { transform: scaleY(1); }
+  }
+
+  /* Cursor blink */
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .animate-blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  /* Fade up for section entry */
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.5s ease-out forwards;
+  }
+}

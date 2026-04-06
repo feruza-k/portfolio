@@ -9,13 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.66",
+    "@ai-sdk/react": "^3.0.148",
     "@anthropic-ai/sdk": "^0.80.0",
+    "ai": "^6.0.146",
     "framer-motion": "^12.38.0",
+    "gray-matter": "^4.0.3",
     "next": "14.2.35",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "remark": "^15.0.1",
+    "remark-html": "^16.0.1"
   },
   "devDependencies": {
+    "@types/dom-speech-recognition": "^0.0.9",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
