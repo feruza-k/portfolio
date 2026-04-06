@@ -16,7 +16,7 @@ export async function GET() {
     const rawMessages = activity.commits.map((c) => c.plainEnglish).join("\n");
 
     const { text } = await generateText({
-      model: anthropic("claude-opus-4.6"),
+      model: anthropic("claude-opus-4-6"),
       prompt: `Rewrite each of these git commit messages as one plain English sentence of ≤12 words. No jargon. Write for someone who doesn't code. Return one sentence per line, same order, nothing else.\n\n${rawMessages}`,
     });
 

@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
 
   // Step 1: Generate reply text
   const { text: reply } = await generateText({
-    model: anthropic("claude-sonnet-4.6"),
+    model: anthropic("claude-sonnet-4-6"),
     system: `You are Feruza Kachkinbayeva. Speak directly as Feruza in first person.
 Be direct, honest, and human. No hedging. No "that's a great question."
 Keep your answer to 2-4 sentences — this will be spoken aloud.
