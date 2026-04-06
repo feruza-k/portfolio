@@ -1,4 +1,4 @@
-import { streamText, convertToModelMessages } from "ai";
+import { streamText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { retrieveRelevantChunks } from "@/lib/rag";
 import { NextRequest } from "next/server";
@@ -19,6 +19,26 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
+// Extract plain text from a message regardless of whether it uses
+// UIMessage (parts[]) or CoreMessage (content string/array) format.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractText(msg: any): string {
+  if (typeof msg.content === "string") return msg.content;
+  if (Array.isArray(msg.content)) {
+    return msg.content
+      .filter((p: { type: string }) => p.type === "text")
+      .map((p: { text?: string }) => p.text ?? "")
+      .join("");
+  }
+  if (Array.isArray(msg.parts)) {
+    return msg.parts
+      .filter((p: { type: string }) => p.type === "text")
+      .map((p: { text?: string }) => p.text ?? "")
+      .join("");
+  }
+  return "";
+}
+
 export async function POST(req: NextRequest) {
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
@@ -31,23 +51,21 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const messages = body.messages ?? [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rawMessages: any[] = body.messages ?? [];
 
-  // Detect JD mode from last user message
-  const lastUserMessage = [...messages]
-    .reverse()
-    .find((m: { role: string }) => m.role === "user");
+  // Normalise to simple { role, content } CoreMessages
+  const messages: { role: "user" | "assistant"; content: string }[] =
+    rawMessages
+      .filter((m) => m.role === "user" || m.role === "assistant")
+      .map((m) => ({ role: m.role, content: extractText(m) }))
+      .filter((m) => m.content.trim().length > 0);
 
-  const lastText =
-    lastUserMessage?.content ??
-    lastUserMessage?.parts
-      ?.filter((p: { type: string }) => p.type === "text")
-      .map((p: { text?: string }) => p.text ?? "")
-      .join("") ??
-    "";
+  const lastUserText =
+    [...messages].reverse().find((m) => m.role === "user")?.content ?? "";
 
-  const jdMode = typeof lastText === "string" && lastText.startsWith("[JD]");
-  const query = jdMode ? lastText.replace(/^\[JD\]\s*/, "") : lastText;
+  const jdMode = lastUserText.startsWith("[JD]");
+  const query = jdMode ? lastUserText.replace(/^\[JD\]\s*/, "") : lastUserText;
 
   const context = await retrieveRelevantChunks(query, jdMode ? 6 : 4);
 
@@ -61,7 +79,7 @@ Be direct. No fluff. Sound like a confident person talking about themselves, not
 
 RELEVANT CONTEXT:
 ${context}`
-    : `You are Feruza Kachkinbayeva. You are speaking directly as Feruza — in first person, in her voice.
+    : `You are Feruza Kachkinbayeva. Speak directly as Feruza — in first person, in her voice.
 Be direct, honest, and human. No hedging. No "that's a great question." No corporate language.
 Answer only based on the context below. If something isn't in there, say so plainly.
 Sound like a person, not a chatbot.
@@ -69,22 +87,17 @@ Sound like a person, not a chatbot.
 RELEVANT CONTEXT:
 ${context}`;
 
-  // Strip [JD] prefix from messages before sending to model
-  const cleanedMessages = messages.map(
-    (m: { role: string; content?: unknown; parts?: unknown[] }) => {
-      if (m.role !== "user") return m;
-      if (typeof m.content === "string" && m.content.startsWith("[JD]")) {
-        return { ...m, content: m.content.replace(/^\[JD\]\s*/, "") };
-      }
-      return m;
-    }
+  // Strip [JD] prefix from the actual message before sending to the model
+  const cleanedMessages = messages.map((m) =>
+    m.role === "user" && m.content.startsWith("[JD]")
+      ? { ...m, content: m.content.replace(/^\[JD\]\s*/, "") }
+      : m
   );
 
   const result = streamText({
     model: anthropic("claude-sonnet-4.6"),
     system: systemPrompt,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    messages: await convertToModelMessages(cleanedMessages as any),
+    messages: cleanedMessages,
   });
 
   return result.toUIMessageStreamResponse();
