@@ -1,6 +1,6 @@
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
-import { getKnowledgeBase } from "@/lib/knowledge";
+import { retrieveRelevantChunks } from "@/lib/rag";
 import { NextRequest } from "next/server";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const kb = getKnowledgeBase();
+  const context = await retrieveRelevantChunks(text, 3);
 
   // Step 1: Generate reply text
   const { text: reply } = await generateText({
@@ -46,10 +46,10 @@ export async function POST(req: NextRequest) {
     system: `You are Feruza Kachkinbayeva. Speak directly as Feruza in first person.
 Be direct, honest, and human. No hedging. No "that's a great question."
 Keep your answer to 2-4 sentences — this will be spoken aloud.
-Answer only based on the knowledge base below. If something isn't there, say so plainly.
+Answer only based on the context below. If something isn't there, say so plainly.
 
-KNOWLEDGE BASE:
-${kb}`,
+RELEVANT CONTEXT:
+${context}`,
     prompt: text,
   });
 

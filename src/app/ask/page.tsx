@@ -10,35 +10,35 @@ export const metadata: Metadata = {
 export default function AskPage() {
   return (
     <main className="min-h-screen bg-dark flex flex-col">
-      {/* Minimal top bar */}
-      <div className="flex items-center justify-between px-6 pt-6 pb-2">
+      {/* Top bar */}
+      <div className="flex items-center justify-between px-6 pt-5 pb-3">
         <Link
           href="/"
-          className="font-mono text-[12px] text-muted hover:text-white transition-colors"
+          className="font-mono text-[11px] text-muted/50 hover:text-white/70 transition-colors tracking-wide"
         >
           ← feruza.dev
         </Link>
-        <span className="font-mono text-[11px] text-muted/50">
-          Powered by Claude · responds in my voice
+        <span className="font-mono text-[10px] text-muted/30 tracking-wide">
+          Claude · ElevenLabs
         </span>
       </div>
 
-      {/* Centrepiece */}
-      <div className="flex-1 flex flex-col items-center justify-start px-6 pt-16 pb-24">
+      {/* Content */}
+      <div className="flex-1 flex flex-col items-center px-6 pt-10 pb-20">
         <div className="w-full max-w-2xl space-y-10">
+
           {/* Heading */}
-          <div className="text-center space-y-2">
-            <h1 className="font-display text-[36px] sm:text-[44px] font-bold text-white leading-tight">
+          <div className="space-y-1">
+            <h1 className="font-display text-[32px] sm:text-[40px] font-bold text-white leading-tight">
               Don&apos;t read about me.
               <br />
               Ask me anything.
             </h1>
-            <p className="font-mono text-[12px] text-muted">
+            <p className="font-mono text-[11px] text-muted/40 tracking-wide">
               answers in my voice · always on
             </p>
           </div>
 
-          {/* Chat */}
           <ChatInterface />
         </div>
       </div>

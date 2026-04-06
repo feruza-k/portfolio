@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-embeddings": "npx tsx --env-file=.env.local scripts/generate-embeddings.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.66",
@@ -16,10 +17,12 @@
     "framer-motion": "^12.38.0",
     "gray-matter": "^4.0.3",
     "next": "14.2.35",
+    "openai": "^6.33.0",
     "react": "^18",
     "react-dom": "^18",
     "remark": "^15.0.1",
-    "remark-html": "^16.0.1"
+    "remark-html": "^16.0.1",
+    "tsx": "^4.21.0"
   },
   "devDependencies": {
     "@types/dom-speech-recognition": "^0.0.9",

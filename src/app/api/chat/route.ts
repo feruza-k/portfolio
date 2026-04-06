@@ -1,9 +1,8 @@
-import { streamText } from "ai";
+import { streamText, convertToModelMessages } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
-import { getKnowledgeBase } from "@/lib/knowledge";
+import { retrieveRelevantChunks } from "@/lib/rag";
 import { NextRequest } from "next/server";
 
-// Simple in-memory rate limiter
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT = 20;
 const WINDOW_MS = 60 * 60 * 1000;
@@ -31,8 +30,26 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const { messages, jdMode } = await req.json();
-  const kb = getKnowledgeBase();
+  const body = await req.json();
+  const messages = body.messages ?? [];
+
+  // Detect JD mode from last user message
+  const lastUserMessage = [...messages]
+    .reverse()
+    .find((m: { role: string }) => m.role === "user");
+
+  const lastText =
+    lastUserMessage?.content ??
+    lastUserMessage?.parts
+      ?.filter((p: { type: string }) => p.type === "text")
+      .map((p: { text?: string }) => p.text ?? "")
+      .join("") ??
+    "";
+
+  const jdMode = typeof lastText === "string" && lastText.startsWith("[JD]");
+  const query = jdMode ? lastText.replace(/^\[JD\]\s*/, "") : lastText;
+
+  const context = await retrieveRelevantChunks(query, jdMode ? 6 : 4);
 
   const systemPrompt = jdMode
     ? `You are Feruza Kachkinbayeva's AI assistant. The user has pasted a job description.
@@ -42,20 +59,32 @@ Analyse it and map Feruza's experience to the role. Structure your response as:
 3. Why she's worth a conversation anyway (1 concrete reason)
 Be direct. No fluff. Sound like a confident person talking about themselves, not a cover letter.
 
-KNOWLEDGE BASE:
-${kb}`
+RELEVANT CONTEXT:
+${context}`
     : `You are Feruza Kachkinbayeva. You are speaking directly as Feruza — in first person, in her voice.
 Be direct, honest, and human. No hedging. No "that's a great question." No corporate language.
-Answer only based on the knowledge base below. If something isn't in there, say so plainly.
+Answer only based on the context below. If something isn't in there, say so plainly.
 Sound like a person, not a chatbot.
 
-KNOWLEDGE BASE:
-${kb}`;
+RELEVANT CONTEXT:
+${context}`;
+
+  // Strip [JD] prefix from messages before sending to model
+  const cleanedMessages = messages.map(
+    (m: { role: string; content?: unknown; parts?: unknown[] }) => {
+      if (m.role !== "user") return m;
+      if (typeof m.content === "string" && m.content.startsWith("[JD]")) {
+        return { ...m, content: m.content.replace(/^\[JD\]\s*/, "") };
+      }
+      return m;
+    }
+  );
 
   const result = streamText({
     model: anthropic("claude-sonnet-4.6"),
     system: systemPrompt,
-    messages,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    messages: await convertToModelMessages(cleanedMessages as any),
   });
 
   return result.toUIMessageStreamResponse();
