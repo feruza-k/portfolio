@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Playfair_Display, JetBrains_Mono, Inter } from "next/font/google";
+import { Syne, JetBrains_Mono, Inter } from "next/font/google";
+import { ScrollReset } from "@/components/layout/ScrollReset";
 import "./globals.css";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 
-const playfair = Playfair_Display({
+const syne = Syne({
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -25,14 +25,14 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Feruza Kachkinbayeva — AI Engineer",
   description:
-    "Data scientist and AI engineer. Building AI systems from start to finish — the kind that actually get used.",
+    "Applied AI Engineer in London. Building AI systems that turn complex data into decisions.",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://feruza.dev"
   ),
   openGraph: {
     title: "Feruza Kachkinbayeva — AI Engineer",
     description:
-      "Data scientist and AI engineer. Building AI systems from start to finish.",
+      "Applied AI Engineer in London. Building AI systems that turn complex data into decisions.",
     url: "https://feruza.dev",
     siteName: "feruza.dev",
     locale: "en_GB",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary",
     title: "Feruza Kachkinbayeva — AI Engineer",
     description:
-      "Data scientist and AI engineer. Building AI systems from start to finish.",
+      "Applied AI Engineer in London. Building AI systems that turn complex data into decisions.",
   },
 };
 
@@ -54,12 +54,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${jetbrainsMono.variable} ${inter.variable}`}
+      className={`${syne.variable} ${jetbrainsMono.variable} ${inter.variable}`}
     >
-      <body>
-        <Navbar />
+      <body className="bg-[#0c0c0e] text-[#f2ede6]">
+        <ScrollReset />
+        <div className="grain-overlay" aria-hidden="true" />
         {children}
-        <Footer />
       </body>
     </html>
   );

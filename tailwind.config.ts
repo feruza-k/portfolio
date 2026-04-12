@@ -5,38 +5,52 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/ai-elements/**/*.{ts,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        ink: "#111110",
-        secondary: "#374151",
-        muted: "#6B7280",
-        faint: "#E5E7EB",
-        subtle: "#F9FAFB",
-        "map-heat": "#E8A020",
-        dark: "#0F1923",
-        "dark-surface": "#1E293B",
-        "dark-accent": "#38BDF8",
+        // HSL-based tokens — support bg-primary/10 opacity modifiers
+        primary:    "hsl(var(--primary) / <alpha-value>)",
+        accent:     "hsl(var(--accent) / <alpha-value>)",
+        background: "hsl(var(--background) / <alpha-value>)",
+        foreground: "hsl(var(--foreground) / <alpha-value>)",
+        card:       "hsl(var(--card) / <alpha-value>)",
+        border:     "hsl(var(--border) / <alpha-value>)",
+        "muted-fg": "hsl(var(--muted-fg) / <alpha-value>)",
+        "terminal-green": "hsl(var(--terminal-green) / <alpha-value>)",
+        // Solid aliases
+        secondary:  "#111114",
+        muted:      "#6b7280",
       },
       fontFamily: {
         display: ["var(--font-display)", "Georgia", "serif"],
-        mono: ["var(--font-mono)", "Menlo", "monospace"],
-        body: ["var(--font-body)", "system-ui", "sans-serif"],
+        mono:    ["var(--font-mono)",    "Menlo",   "monospace"],
+        body:    ["var(--font-body)",    "system-ui","sans-serif"],
       },
-      typography: {
-        DEFAULT: {
-          css: {
-            color: "#111110",
-            fontFamily: "var(--font-body)",
-            "h1, h2, h3": {
-              fontFamily: "var(--font-display)",
-            },
-            code: {
-              fontFamily: "var(--font-mono)",
-            },
-          },
+      borderRadius: {
+        lg: "0.75rem",
+        xl: "1rem",
+        "2xl": "1.25rem",
+      },
+      keyframes: {
+        "spin-slow": {
+          from: { transform: "rotate(0deg)" },
+          to:   { transform: "rotate(360deg)" },
         },
+        "float-slow": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%":       { transform: "translateY(-20px)" },
+        },
+        "float-medium": {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%":       { transform: "translateY(-15px)" },
+        },
+      },
+      animation: {
+        "spin-slow":    "spin-slow 20s linear infinite",
+        "float-slow":   "float-slow 8s ease-in-out infinite",
+        "float-medium": "float-medium 6s ease-in-out infinite -2s",
       },
     },
   },

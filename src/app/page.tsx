@@ -1,15 +1,25 @@
-import { Currently } from "@/components/sections/Currently";
-import { TheWork } from "@/components/sections/TheWork";
-import { HowIWork } from "@/components/sections/HowIWork";
-import { FieldNotesPreview } from "@/components/sections/FieldNotesPreview";
+import { Navigation } from "@/components/layout/Navigation";
+import { Landing } from "@/components/scenes/Landing";
+import { Agent } from "@/components/scenes/Agent";
+import { Map } from "@/components/scenes/Map";
+import { CaseStudies } from "@/components/scenes/CaseStudies";
+import { Thoughts } from "@/components/scenes/Thoughts";
+import { About } from "@/components/scenes/About";
+import { Footer } from "@/components/layout/Footer";
 
 export default function Home() {
   return (
-    <main className="max-w-3xl mx-auto px-6 pb-8">
-      <Currently />
-      <TheWork />
-      <HowIWork />
-      <FieldNotesPreview />
-    </main>
+    <>
+      <Navigation />
+      <main>
+        <Landing />
+        <Agent />
+        <Map />
+        <CaseStudies />
+        <Thoughts />
+        <About />
+        <Footer />
+      </main>
+    </>
   );
 }

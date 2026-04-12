@@ -2,8 +2,8 @@
 const nextConfig = {
   experimental: {
     outputFileTracingIncludes: {
-      "/api/chat": ["./content/**/*"],
-      "/api/speak": ["./content/**/*"],
+      "/api/agent": ["./content/**/*"],
+      "/api/voice": ["./content/**/*"],
     },
   },
 };

@@ -453,6 +453,198 @@ Be direct. Sound like a confident person, not a cover letter.
 
 ---
 
+## THESIS — FULL DETAIL
+
+**Title:** Location Intelligence for Café Site Selection: Predicting Success and
+Commercial Rent Prices in London
+
+**Institution:** University of Greenwich, MSc Big Data & Business Intelligence
+**Submitted:** September 6, 2024. Word count: 16,361.
+**Supervisor:** Dr Sanyaade Olufemi Adekoya
+**Award:** SLA Masters Award 2024, 2nd Place
+
+---
+
+### Abstract
+
+In London's vibrant yet competitive café industry, the success of new ventures
+is critically dependent on optimal site selection. This thesis explores the
+enhancement of café site selection processes through the integration of
+sophisticated data-driven frameworks including machine learning techniques and
+the Analytic Hierarchy Process (AHP). The central aim is to employ these
+methodologies to forecast café success potential and estimate commercial rent
+prices across London's Lower Super Output Areas (LSOAs), thereby optimising
+resource allocation during the site selection process.
+
+---
+
+### The Problem
+
+74% of new cafés fail within five years in the UK. The UK coffee shop market
+is valued at approximately £4.5 billion with 6% annual growth, yet the failure
+rate remains high. Most site selection decisions are made on gut instinct,
+postcode-level demographics, and limited market research — which can cost
+£50,000+ to get wrong.
+
+---
+
+### Research Objectives
+
+1. Develop a comprehensive predictive model for assessing café success potential
+   — analysing demographics, competition density, foot traffic, and local
+   amenities, producing a success score per LSOA categorised into Low / Medium
+   / High / Very High.
+2. Build a rent prediction model using machine learning to estimate commercial
+   rent prices across all London LSOAs.
+3. Perform comparative analysis integrating predicted rent with success levels
+   to rank locations by combined opportunity score.
+
+---
+
+### Data Sources
+
+- **Demographics:** ONS LSOA Atlas (population size, average age, average
+  income, employment rate 2011/2015)
+- **Public transport:** TfL PT Accessibility Levels (PTAL 2014)
+- **Competition density:** Google Maps Extractor via Apify — number of nearby
+  cafés per LSOA
+- **Customer satisfaction / Café Score:** Google Places ratings scraped via Apify
+- **Walk Score / amenity access:** walkability index per LSOA
+- **Rent prices:** ONS Median House Prices by LSOA; market rental data
+- **Geographic boundaries:** Greater London Authority Statistical GIS Boundary
+  Files (4,835 LSOAs)
+
+---
+
+### Methodology
+
+**Phase 1 — Data Collection and Integration**
+Six datasets merged on LSOA code. Missing values imputed. MinMax normalisation
+applied to bring all features onto a [0, 1] scale. The preprocessing pipeline
+ran in Python on Google Colab using Pandas and GeoPandas.
+
+**Phase 2 — Unsupervised Machine Learning (Clustering)**
+
+K-Means: Elbow Method selected K=3. Silhouette Score = 0.37 (moderate overlap).
+Clusters separated areas by income, crime, amenities, and competition.
+
+DBSCAN: Produced more distinct clusters. Silhouette Score higher than K-Means.
+Key clusters: noise cluster (-1) = high income, high crime, high amenities,
+high competition; Cluster 0 = lower crime, fewer amenities, minimal competition;
+Cluster 1 = moderate crime/income/amenities with higher Café Score.
+
+Conclusion: Both methods provided useful spatial groupings but neither fully
+captured the complexity. Clustering was exploratory — AHP was the primary
+decision framework.
+
+**Phase 3 — Analytic Hierarchy Process (AHP)**
+
+AHP transforms expert pairwise judgements into quantitative weights for
+multi-criteria decision-making. A pairwise comparison matrix was constructed
+for 12 criteria. Eigenvalue decomposition produced the weight vector.
+
+**Consistency check:** Consistency Ratio (CR) = 0.0693 — below the 0.10
+threshold, confirming the pairwise comparisons are reliable and valid.
+
+**Sensitivity analysis:** Adjusting each criterion weight by ±10%. Public
+Transport Accessibility Levels had the highest sensitivity — small changes in
+its weight shifted AHP scores the most. This confirmed its dominant influence.
+
+**AHP Criterion Weights (full table):**
+
+| Criterion | Weight (%) | Justification |
+|---|---|---|
+| Population Size (2015) | 1.82 | Base customer pool; less important than economic factors |
+| Average Age (2015) | 2.92 | Age affects visit frequency; income matters more |
+| Average Income | 3.65 | Directly linked to spending power; key for premium cafés |
+| Employment Rate (2011) | 5.03 | Economic stability drives disposable income and frequency |
+| PT Accessibility Levels (PTAL 2014) | 16.92 | Highest weight — foot traffic strongly determined by transit access |
+| Walk Score / Amenity Access | ~8–10 | Walkability and nearby amenities increase casual footfall |
+| Competition Density | ~9–11 | Oversaturation reduces success potential |
+| Crime Rate | ~4–6 | High crime deters customers and increases operating costs |
+| Café Score (customer ratings) | 10.59 | Customer satisfaction drives loyalty and new custom |
+| House Price / Rent Level | ~6–8 | Operating cost proxy; higher rent reduces viability |
+| Green Space / Parks | ~3–4 | Amenity factor influencing dwell time |
+| Deprivation Index | ~4–6 | Socioeconomic composite; high deprivation reduces spend |
+
+The AHP Weighted Score for each LSOA is the dot product of the feature values
+and these weights. Scores were divided into four percentile-based categories:
+Low / Medium / High / Very High Success.
+
+**Phase 4 — Rent Prediction (Semi-Supervised Machine Learning)**
+
+Linear Regression and Random Forest Regressor compared for rent prediction.
+Pseudo-labelling used to extend the labelled dataset with predicted values for
+unlabelled LSOAs (semi-supervised approach).
+
+Results:
+- Random Forest Regressor significantly outperformed Linear Regression
+- R² = 0.95 for the best Random Forest model
+- ANOVA test: p-value < 0.05, confirming the performance difference is
+  statistically significant, not due to random variation
+- Learning curve showed good generalisation — training score and
+  cross-validation score converged with additional data
+
+Hyperparameter tuning was applied to the Random Forest model after initial
+evaluation.
+
+**Phase 5 — Comparative Analysis**
+
+Predicted rent values merged with actual market data for 20 sample postcodes.
+Rent difference (predicted vs actual) classified into success levels:
+- Very High Success: small or positive difference (slight overestimation)
+- High / Medium / Low: larger negative differences indicate lower accuracy
+
+Final ranking: LSOAs ranked by combined score — AHP success level + favourable
+rent prediction. This dual-objective ranking identifies sites with both high
+success potential and manageable rent costs.
+
+---
+
+### Key Findings
+
+- Central London LSOAs (affluent, high PTAL, high amenities) dominate the
+  "Very High Success" category — e.g., Tower Hamlets: AHP score 139,481
+- Outer London areas show predominantly "Low" to "Medium" success levels
+- Public transport accessibility is the single most influential factor (16.92%
+  weight) — more important than demographics or competition alone
+- Random Forest with R² = 0.95 is a viable rent prediction tool for LSOAs
+- The model surfaces emerging neighbourhoods: lower-rent areas with medium-high
+  success potential that are not obvious from traditional market research
+
+---
+
+### Limitations
+
+- Aggregated LSOA-level data lacks granularity (no individual footfall counts,
+  no real-time data)
+- Data from 2011–2015 for some demographic variables — may not reflect 2024
+  conditions
+- Clustering techniques (K-Means, DBSCAN) showed moderate overlap and were
+  ultimately exploratory rather than the primary model
+- Model generalisation beyond London untested — framework is replicable but
+  would require recalibration for other cities
+
+---
+
+### Tools and Tech Stack
+
+Python, Google Colab, Pandas, GeoPandas, Scikit-learn, Folium, Matplotlib,
+Apify (web scraping), ONS open data, GLA boundary files.
+
+---
+
+### What I'd Do Differently
+
+The AHP weights were set from literature review and expert judgement rather than
+empirical optimisation. I'd experiment with data-driven weight derivation —
+potentially using a regression-based approach to back-calculate weights from
+known success/failure outcomes. The rent model also relied heavily on
+demographic proxies; real-time foot traffic data (e.g., mobile telemetry) would
+substantially improve it.
+
+---
+
 ## CONTACT
 
 feruza97k@gmail.com
