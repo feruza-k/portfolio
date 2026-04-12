@@ -187,12 +187,4 @@ export async function POST(req: NextRequest) {
   return result.toUIMessageStreamResponse();
 }
 
-// Ensure content files are bundled in the serverless function
 export const dynamic = "force-dynamic";
-
-// Vercel file tracing: include content directory
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};

@@ -38,7 +38,7 @@ export function About() {
           transition={{ duration: 0.8, ease }}
           className="mb-16 text-center"
         >
-          <p className="section-label mb-4">// about</p>
+          <p className="section-label mb-4">{"// about"}</p>
           <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
             Working with me
           </h2>

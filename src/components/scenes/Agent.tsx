@@ -104,6 +104,7 @@ export function Agent() {
         audio.play().catch(() => resolve());
       });
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, isLoading, voiceOn]);
 
   // Speech-to-text via Web Speech API

@@ -45,7 +45,8 @@ interface MapClientProps {
   filterOptions: readonly Filter[];
 }
 
-export default function MapClient({ filterOptions: _ }: MapClientProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function MapClient(_props: MapClientProps) {
   const [geoData, setGeoData] = useState<GeoJsonObject | null>(null);
   const [activeFilter, setActiveFilter] = useState<Filter>("All");
   const [error, setError] = useState(false);
