@@ -1,19 +1,13 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 const SUBTITLE = "Applied AI Engineer · London";
-const STATS = [
-  { value: "4,835", label: "LSOAs analysed" },
-  { value: "R² 0.95", label: "Rent prediction" },
-  { value: "31 days", label: "to ship LifeOS" },
-];
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export function Landing() {
-  const audioRef = useRef<HTMLAudioElement>(null);
   const [typed, setTyped] = useState("");
   const [typingDone, setTypingDone] = useState(false);
 
@@ -106,76 +100,18 @@ export function Landing() {
           </p>
         </div>
 
-        {/* Stats ticker */}
-        <AnimatePresence>
-          {typingDone && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3, ease }}
-              className="mt-10 flex gap-8 sm:gap-12"
-            >
-              {STATS.map((stat, i) => (
-                <motion.div
-                  key={stat.value}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + i * 0.15, duration: 0.6, ease }}
-                  className="flex flex-col items-center text-center"
-                >
-                  <span className="font-mono text-xl sm:text-2xl font-semibold text-foreground">
-                    {stat.value}
-                  </span>
-                  <span className="font-mono text-[10px] text-muted-fg uppercase tracking-wider mt-1">
-                    {stat.label}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* CTAs */}
-        <AnimatePresence>
-          {typingDone && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.9, ease }}
-              className="mt-12 flex flex-col gap-4 sm:flex-row"
-            >
-              <button
-                onClick={() => scrollTo("agent")}
-                className="group relative overflow-hidden rounded-lg bg-primary px-7 py-3 font-mono text-[13px] font-semibold text-background tracking-wide transition-all duration-300 hover:opacity-90 hover:shadow-[0_0_24px_hsl(var(--primary)/0.4)]"
-              >
-                <SparklesIcon />
-                Talk to my AI agent
-              </button>
-              <button
-                onClick={() => scrollTo("work")}
-                className="rounded-lg border border-border/50 bg-card/30 px-7 py-3 font-mono text-[13px] text-foreground/70 tracking-wide backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:text-foreground hover:bg-primary/[0.03]"
-              >
-                See the work
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Voice button */}
-        <AnimatePresence>
-          {typingDone && (
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.4, duration: 0.6 }}
-              onClick={() => audioRef.current?.play()}
-              className="mt-8 flex items-center gap-2 font-mono text-xs text-muted-fg/60 transition-all duration-300 hover:text-primary"
-            >
-              <VolumeIcon />
-              <span>hear my intro</span>
-            </motion.button>
-          )}
-        </AnimatePresence>
+        {/* Scroll CTA */}
+        {typingDone && (
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            onClick={() => scrollTo("work")}
+            className="mt-10 rounded-lg border border-border/50 bg-card/30 px-7 py-3 font-mono text-[13px] text-foreground/70 tracking-wide backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:text-foreground hover:bg-primary/[0.03]"
+          >
+            See the work
+          </motion.button>
+        )}
       </div>
 
       {/* Scroll indicator */}
@@ -191,32 +127,7 @@ export function Landing() {
         <ChevronDown />
       </motion.div>
 
-      <audio ref={audioRef} src="/audio/intro.mp3" preload="none" />
     </section>
-  );
-}
-
-function SparklesIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      className="inline mr-1.5 -mt-0.5 transition-transform duration-300 group-hover:rotate-12"
-      aria-hidden="true"
-    >
-      <path d="M12 2l1.09 3.26L16 6l-2.91.74L12 10l-1.09-3.26L8 6l2.91-.74L12 2zM5 12l.73 2.18L8 15l-2.27.82L5 18l-.73-2.18L2 15l2.27-.82L5 12zm14 0l.73 2.18L22 15l-2.27.82L19 18l-.73-2.18L16 15l2.27-.82L19 12z" />
-    </svg>
-  );
-}
-
-function VolumeIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-      <polygon points="1,6 1,14 5,14 11,18 11,2 5,6" />
-      <path d="M14 6.5a5 5 0 0 1 0 7" />
-    </svg>
   );
 }
 
