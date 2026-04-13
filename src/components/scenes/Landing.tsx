@@ -100,17 +100,28 @@ export function Landing() {
           </p>
         </div>
 
-        {/* Scroll CTA */}
+        {/* CTAs */}
         {typingDone && (
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
-            onClick={() => scrollTo("work")}
-            className="mt-10 rounded-lg border border-border/50 bg-card/30 px-7 py-3 font-mono text-[13px] text-foreground/70 tracking-wide backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:text-foreground hover:bg-primary/[0.03]"
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.9, ease }}
+            className="mt-12 flex flex-col gap-4 sm:flex-row"
           >
-            See the work
-          </motion.button>
+            <button
+              onClick={() => scrollTo("agent")}
+              className="group relative overflow-hidden rounded-lg bg-primary px-7 py-3 font-mono text-[13px] font-semibold text-background tracking-wide transition-all duration-300 hover:opacity-90 hover:shadow-[0_0_24px_hsl(var(--primary)/0.4)]"
+            >
+              <SparklesIcon />
+              Talk to my AI agent
+            </button>
+            <button
+              onClick={() => scrollTo("work")}
+              className="rounded-lg border border-border/50 bg-card/30 px-7 py-3 font-mono text-[13px] text-foreground/70 tracking-wide backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:text-foreground hover:bg-primary/[0.03]"
+            >
+              See the work
+            </button>
+          </motion.div>
         )}
       </div>
 
@@ -128,6 +139,21 @@ export function Landing() {
       </motion.div>
 
     </section>
+  );
+}
+
+function SparklesIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="inline mr-1.5 -mt-0.5 transition-transform duration-300 group-hover:rotate-12"
+      aria-hidden="true"
+    >
+      <path d="M12 2l1.09 3.26L16 6l-2.91.74L12 10l-1.09-3.26L8 6l2.91-.74L12 2zM5 12l.73 2.18L8 15l-2.27.82L5 18l-.73-2.18L2 15l2.27-.82L5 12zm14 0l.73 2.18L22 15l-2.27.82L19 18l-.73-2.18L16 15l2.27-.82L19 12z" />
+    </svg>
   );
 }
 
