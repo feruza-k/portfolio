@@ -123,7 +123,7 @@ function PlasmaCanvas({
           const warp = warpAmp * Math.sin(lng * 3 + t * 0.05);
           const px = x + warp * Math.cos(lng);
           const py = ringY + depthY + warp * Math.sin(lng) * 0.5;
-          i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+          if (i === 0) { ctx.moveTo(px, py); } else { ctx.lineTo(px, py); }
         }
         const depth = (Math.sin(latR) + 1) / 2;
         ctx.strokeStyle = getColour(mix, depth, 0.1 + depth * 0.55 * a);
@@ -143,7 +143,7 @@ function PlasmaCanvas({
           const z = ringR2 * Math.cos(lngR);
           const y = cy + R * Math.sin(lat2) * Math.cos(tilt) + z * Math.sin(tilt);
           const warp = a * 9 * Math.sin(lat2 * 4 + lngR * 2 + t * 0.06);
-          i === 0 ? ctx.moveTo(x + warp, y) : ctx.lineTo(x + warp, y);
+          if (i === 0) { ctx.moveTo(x + warp, y); } else { ctx.lineTo(x + warp, y); }
         }
         const side = Math.cos(lngR);
         ctx.strokeStyle = getColour(mix, (side + 1) / 2, (0.06 + ((side + 1) / 2) * 0.25) * a);
