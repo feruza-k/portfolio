@@ -83,6 +83,7 @@ function PlasmaCanvas({
     }
 
     function frame() {
+      if (!canvas) return;
       const W = canvas.width, H = canvas.height;
       const cx = W / 2, cy = H / 2;
       const t = tRef.current;
