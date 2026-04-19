@@ -7,6 +7,9 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type WindowWithSpeech = typeof window & { SpeechRecognition?: any; webkitSpeechRecognition?: any };
+
 const SUGGESTIONS = [
   "Walk me through your thesis",
   "What are you building right now?",
@@ -254,7 +257,8 @@ export function Agent() {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const voiceContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
   const voiceActiveRef = useRef(false);
   const isSpeakingRef = useRef(false);
   const startListeningRef = useRef<() => void>(() => {});
@@ -354,10 +358,7 @@ export function Agent() {
   // Defined via ref so onend can call it recursively without stale closures
   startListeningRef.current = () => {
     if (!voiceActiveRef.current || recognitionRef.current) return;
-    const SR = (window as typeof window & { webkitSpeechRecognition?: typeof SpeechRecognition })
-      .SpeechRecognition ??
-      (window as typeof window & { webkitSpeechRecognition?: typeof SpeechRecognition })
-      .webkitSpeechRecognition;
+    const SR = (window as WindowWithSpeech).SpeechRecognition ?? (window as WindowWithSpeech).webkitSpeechRecognition;
     if (!SR) return;
 
     const rec = new SR();
@@ -423,10 +424,7 @@ export function Agent() {
       return;
     }
 
-    const SR = (window as typeof window & { webkitSpeechRecognition?: typeof SpeechRecognition })
-      .SpeechRecognition ??
-      (window as typeof window & { webkitSpeechRecognition?: typeof SpeechRecognition })
-      .webkitSpeechRecognition;
+    const SR = (window as WindowWithSpeech).SpeechRecognition ?? (window as WindowWithSpeech).webkitSpeechRecognition;
     if (!SR) {
       setCaption("voice not supported — try Chrome");
       setTimeout(() => setCaption(""), 2500);

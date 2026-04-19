@@ -236,7 +236,7 @@ export async function createCalendarEvent(params: {
 }): Promise<void> {
   const token = await getAccessToken();
   const calendarId = process.env.GOOGLE_CALENDAR_ID ?? "primary";
-  const yourEmail = process.env.GOOGLE_CALENDAR_ID ?? "feruza97k@gmail.com";
+  const yourEmail = process.env.OWNER_EMAIL ?? "feruza97k@gmail.com";
 
   // Parse isoLocal to compute end time correctly
   // isoLocal is like "2026-04-21T10:00:00" — local London time, no offset
@@ -285,6 +285,46 @@ export async function createCalendarEvent(params: {
     const err = (await res.json()) as unknown;
     throw new Error(`Calendar event creation failed: ${JSON.stringify(err)}`);
   }
+
+  // Gmail API — send owner notification (Google won't email the organiser for their own events)
+  await sendOwnerEmail(token, params, yourEmail).catch((e) =>
+    console.warn("[calendar] owner notification failed:", e)
+  );
+}
+
+async function sendOwnerEmail(
+  token: string,
+  params: { attendeeName: string; attendeeEmail: string; company: string; role: string; isoLocal: string },
+  to: string
+): Promise<void> {
+  const body = [
+    `New call booked via feruza.dev`,
+    ``,
+    `Who:  ${params.attendeeName} <${params.attendeeEmail}>`,
+    `Co:   ${params.company}`,
+    `Role: ${params.role}`,
+    `When: ${params.isoLocal}`,
+  ].join("\n");
+
+  const raw = [
+    `To: ${to}`,
+    `Subject: Call booked — ${params.attendeeName} / ${params.company}`,
+    `Content-Type: text/plain; charset=utf-8`,
+    ``,
+    body,
+  ].join("\r\n");
+
+  const encoded = Buffer.from(raw)
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+
+  await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ raw: encoded }),
+  });
 }
 
 /** Returns true if Google Calendar env vars are configured. */
