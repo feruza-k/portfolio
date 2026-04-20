@@ -31,12 +31,8 @@ export function Landing() {
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
-      {/* Ambient gradient orbs */}
-      <div className="pointer-events-none absolute top-1/4 -left-32 h-[500px] w-[500px] rounded-full bg-primary/[0.04] blur-[120px] animate-float-slow" />
-      <div className="pointer-events-none absolute bottom-1/4 -right-32 h-[400px] w-[400px] rounded-full bg-accent/[0.04] blur-[120px] animate-float-medium" />
-
-      {/* Radial vignette */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background))_75%)]" />
+      {/* Soft vignette to focus the headline */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,hsl(var(--background))_80%)]" />
 
       {/* Spinning ring */}
       <div className="pointer-events-none absolute top-1/2 left-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 opacity-[0.03] animate-spin-slow">

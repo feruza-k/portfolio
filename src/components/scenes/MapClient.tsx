@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   MapContainer,
   TileLayer,
@@ -209,6 +210,8 @@ export default function MapClient(_props: MapClientProps) {
   const chatScrollRef = useRef<HTMLDivElement>(null);
   const chatInputRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const [showHint, setShowHint] = useState(false);
+  const hintDismissed = useRef(false);
 
   // Load GeoJSON
   useEffect(() => {
@@ -217,6 +220,13 @@ export default function MapClient(_props: MapClientProps) {
       .then((data) => setGeoData(data))
       .catch(() => setError(true));
   }, []);
+
+  // Show hint tooltip 3s after map loads
+  useEffect(() => {
+    if (!geoData || hintDismissed.current) return;
+    const t = setTimeout(() => setShowHint(true), 3000);
+    return () => clearTimeout(t);
+  }, [geoData]);
 
   // Load Statistics CSV
   useEffect(() => {
@@ -348,6 +358,8 @@ export default function MapClient(_props: MapClientProps) {
       (r) => (r as unknown as Record<string, string>)["LSOA Code"] === code
     ) ?? null;
 
+    hintDismissed.current = true;
+    setShowHint(false);
     // Cancel any in-flight stream before switching LSOAs
     abortRef.current?.abort();
     abortRef.current = null;
@@ -398,15 +410,15 @@ export default function MapClient(_props: MapClientProps) {
   return (
     <div className="relative">
       {/* Filter pills */}
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="flex flex-wrap gap-2 mb-4 pt-2">
         {FILTER_OPTIONS.map((f) => (
           <button
             key={f}
             onClick={() => setActiveFilter(f)}
-            className={`font-mono text-[11px] px-3 py-1.5 border transition-opacity duration-300 ${
+            className={`rounded-lg font-mono text-[11px] px-3 py-1.5 border transition-all duration-200 ${
               activeFilter === f
-                ? "border-[#4fc4a0]/60 text-[#4fc4a0] bg-[#4fc4a0]/5"
-                : "border-[#1f1f23] text-[#6b7280] hover:text-[#f2ede6] hover:border-[#1f1f23]/60"
+                ? "border-[#4fc4a0]/50 text-[#4fc4a0] bg-[#4fc4a0]/8"
+                : "border-[#1f1f23] text-[#6b7280] hover:text-[#f2ede6] hover:border-[#4fc4a0]/20 hover:bg-[#4fc4a0]/[0.03]"
             }`}
           >
             {FILTER_LABELS[f]}
@@ -432,7 +444,7 @@ export default function MapClient(_props: MapClientProps) {
               <span className="font-mono text-[12px] text-[#6b7280]">map data not found</span>
             </div>
           ) : (
-            <div className="w-full h-[520px] border border-[#1f1f23] overflow-hidden leaflet-dark">
+            <div className="relative w-full h-[520px] border border-[#1f1f23] overflow-hidden leaflet-dark">
               <MapContainer
                 center={[51.505, -0.09]}
                 zoom={10}
@@ -484,6 +496,27 @@ export default function MapClient(_props: MapClientProps) {
                   />
                 )}
               </MapContainer>
+
+              <AnimatePresence>
+                {showHint && !selected && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.5 }}
+                    className="absolute top-[28%] left-1/2 -translate-x-1/2 z-[1000] pointer-events-none flex flex-col items-center"
+                  >
+                    <div
+                      className="rounded px-4 py-2 font-mono text-[11px] text-[#4fc4a0] whitespace-nowrap border border-[#4fc4a0]/50"
+                      style={{ background: "rgba(10,10,12,0.92)" }}
+                    >
+                      click any area
+                    </div>
+                    <div className="w-px h-7 bg-gradient-to-b from-[#4fc4a0]/50 to-transparent" />
+                    <span className="text-[#4fc4a0]/60 text-[10px]">▼</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           )}
         </div>

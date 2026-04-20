@@ -469,9 +469,9 @@ export function Agent() {
 
   return (
     <section id="agent" className="relative py-32 px-6">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.03)_0%,transparent_60%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.04)_0%,transparent_60%)]" />
 
-      <div className="relative mx-auto max-w-3xl">
+      <div className="relative mx-auto max-w-4xl">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -509,9 +509,13 @@ export function Agent() {
                 <span className="h-3 w-3 rounded-full bg-accent/40 hover:bg-accent/70 transition-colors" />
                 <span className="h-3 w-3 rounded-full bg-terminal-green/50 hover:bg-terminal-green transition-colors" />
               </div>
-              <span className="ml-2 font-mono text-[11px] text-muted-fg/60">
-                feruza-agent@london:~
-              </span>
+              <div className="ml-2 flex items-center gap-2">
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-terminal-green opacity-75 animate-ping-soft" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-terminal-green" />
+                </span>
+                <span className="font-mono text-[11px] text-muted-fg/60">feruza-agent@london:~</span>
+              </div>
             </div>
             {/* Show exit voice mode button when voice is active */}
             {voiceActive && (

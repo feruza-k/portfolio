@@ -24,25 +24,25 @@ export function Map() {
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(var(--primary)/0.03)_0%,transparent_60%)]" />
 
-      <div className="relative mx-auto max-w-5xl">
+      <div className="relative mx-auto max-w-4xl">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease }}
-          className="mb-10"
+          className="mb-5"
         >
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-primary/10">
               <GlobeIcon />
             </div>
             <h2 className="font-display text-lg font-semibold tracking-tight text-foreground">
               London Café Site Intelligence
             </h2>
-            <span className="flex items-center gap-1.5 rounded-full border border-accent/15 bg-accent/5 px-3 py-1">
+            <span className="flex items-center gap-1.5 rounded-md border border-accent/15 bg-accent/5 px-2.5 py-0.5">
               <AwardIcon />
-              <span className="font-mono text-[10px] text-accent/80">SLA Master&apos;s Award 2024</span>
+              <span className="font-mono text-[10px] text-accent/70">SLA Master&apos;s Award 2024</span>
             </span>
           </div>
           <p className="text-sm text-muted-fg/80 max-w-2xl leading-relaxed">

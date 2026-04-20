@@ -25,7 +25,6 @@ function parseThoughts(raw: string): ThoughtEntry[] {
 
 export function Thoughts() {
   const [entries, setEntries] = useState<ThoughtEntry[]>([]);
-  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     fetch("/thoughts.md")
@@ -34,7 +33,6 @@ export function Thoughts() {
       .catch(() => {});
   }, []);
 
-  const visible = showAll ? entries : entries.slice(0, 6);
   const latestDate = entries[0]?.date ?? "";
 
   return (
@@ -44,7 +42,7 @@ export function Thoughts() {
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,hsl(var(--accent)/0.03)_0%,transparent_60%)]" />
 
-      <div className="relative mx-auto max-w-3xl">
+      <div className="relative mx-auto max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -92,14 +90,15 @@ export function Thoughts() {
             )}
           </div>
 
-          {/* Entries */}
-          <div className="max-h-[520px] overflow-y-auto divide-y divide-border/20">
+          {/* Entries — fixed height, hidden scrollbar, bottom fade hints at overflow */}
+          <div className="relative">
+            <div className="h-[520px] overflow-y-auto no-scrollbar divide-y divide-border/20">
             {entries.length === 0 ? (
               <div className="px-5 py-8">
                 <span className="font-mono text-[12px] text-muted-fg animate-pulse">loading_</span>
               </div>
             ) : (
-              visible.map((entry, i) => (
+              entries.map((entry, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0 }}
@@ -121,17 +120,11 @@ export function Thoughts() {
                 </motion.div>
               ))
             )}
+            </div>
+            {/* Bottom fade — hints that more entries exist below */}
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-card/80 to-transparent" />
           </div>
         </motion.div>
-
-        {!showAll && entries.length > 6 && (
-          <button
-            onClick={() => setShowAll(true)}
-            className="mt-4 font-mono text-[12px] text-muted-fg/50 hover:text-primary transition-colors duration-300"
-          >
-            show {entries.length - 6} more →
-          </button>
-        )}
       </div>
     </section>
   );

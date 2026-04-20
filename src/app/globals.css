@@ -107,6 +107,9 @@
 .lsoa-score { font-size: 11px; color: hsl(var(--muted-fg)); }
 
 @layer utilities {
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+
   /* === GLASS CARD === */
   .glass-card {
     background: hsl(var(--card) / 0.6);
