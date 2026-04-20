@@ -432,19 +432,19 @@ export default function MapClient(_props: MapClientProps) {
       </div>
 
       {/* Map + Panel layout */}
-      <div className="flex gap-0 relative">
+      <div className="flex flex-col gap-0 relative md:flex-row">
         {/* Map */}
         <div
           className={`transition-all duration-500 ${
-            selected ? "w-[55%]" : "w-full"
+            selected ? "w-full md:w-[55%]" : "w-full"
           }`}
         >
           {error ? (
-            <div className="w-full h-[520px] bg-[#111114] border border-[#1f1f23] flex flex-col items-center justify-center gap-3">
+            <div className="w-full h-[360px] md:h-[520px] bg-[#111114] border border-[#1f1f23] flex flex-col items-center justify-center gap-3">
               <span className="font-mono text-[12px] text-[#6b7280]">map data not found</span>
             </div>
           ) : (
-            <div className="relative w-full h-[520px] border border-[#1f1f23] overflow-hidden leaflet-dark">
+            <div className="relative w-full h-[360px] md:h-[520px] border border-[#1f1f23] overflow-hidden leaflet-dark">
               <MapContainer
                 center={[51.505, -0.09]}
                 zoom={10}
@@ -523,7 +523,7 @@ export default function MapClient(_props: MapClientProps) {
 
         {/* Side panel */}
         {selected && (
-          <div className="w-[45%] h-[520px] bg-[#0d0d0f] border border-[#1f1f23] border-l-0 flex flex-col overflow-hidden">
+          <div className="w-full md:w-[45%] h-[520px] bg-[#0d0d0f] border border-[#1f1f23] md:border-l-0 border-t-0 md:border-t flex flex-col overflow-hidden">
             {/* Panel header */}
             <div className="px-4 py-3 border-b border-[#1f1f23] flex items-start justify-between shrink-0">
               <div>

@@ -11,11 +11,10 @@ const ease = [0.16, 1, 0.3, 1] as const;
 type WindowWithSpeech = typeof window & { SpeechRecognition?: any; webkitSpeechRecognition?: any };
 
 const SUGGESTIONS = [
-  "Schedule a call with me",
+  "Schedule a call", 
   "Introduce yourself",
   "Walk me through your thesis",
   "What are you building right now?",
-  "How did you get started in AI / engineering?",
   "How does your AI agent actually work?"
 ];
 
