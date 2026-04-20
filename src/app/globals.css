@@ -120,11 +120,18 @@
     background: hsl(var(--card) / 0.6);
     backdrop-filter: blur(20px) saturate(1.4);
     border: 1px solid hsl(var(--border) / 0.6);
+    box-shadow: 0 0 28px hsl(var(--primary) / 0.08),
+                0 0 70px hsl(var(--primary) / 0.03),
+                inset 0 1px 0 hsl(var(--primary) / 0.04);
     transition: all 0.4s var(--ease-out-expo);
   }
   .glass-card-hover:hover {
-    border-color: hsl(var(--primary) / 0.25);
-    box-shadow: 0 0 30px hsl(var(--primary) / 0.06), 0 8px 32px hsl(0 0% 0% / 0.3);
+    background: hsl(var(--card) / 0.92);
+    border-color: hsl(var(--primary) / 0.3);
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.14),
+                0 0 100px hsl(var(--primary) / 0.06),
+                inset 0 1px 0 hsl(var(--primary) / 0.08),
+                0 8px 32px hsl(0 0% 0% / 0.2);
     transform: translateY(-2px);
   }
 

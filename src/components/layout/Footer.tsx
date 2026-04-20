@@ -28,7 +28,7 @@ export function Footer() {
             Let&apos;s build something that matters.
           </p>
           <p className="text-sm text-muted-fg/60">
-            Open to AI engineering roles — London or remote.
+            Open to AI engineering roles.
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export function Footer() {
           </span>
           <HeartIcon />
           <span className="font-mono text-[10px] text-muted-fg/25 uppercase tracking-[0.2em]">
-            by Feruza — London, 2025
+            by Feruza — London, 2026
           </span>
         </div>
       </motion.div>

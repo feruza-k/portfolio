@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Syne, JetBrains_Mono, Inter } from "next/font/google";
 import { ScrollReset } from "@/components/layout/ScrollReset";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const syne = Syne({
@@ -60,6 +61,7 @@ export default function RootLayout({
         <ScrollReset />
         <div className="grain-overlay" aria-hidden="true" />
         {children}
+        <Analytics />
       </body>
     </html>
   );
