@@ -13,12 +13,12 @@ const CARDS = [
   {
     icon: <BuildIcon />,
     label: "What I'm building toward",
-    text: "Working toward a Knowledge Transfer Partnership and Azure AI-102. The longer-term goal is Deloitte or similar — not because of the name, but because the problems are real and the data is messy. That's where I do my best work.",
+    text: "Production AI systems in complex, regulated environments — the kind where the data is messy, the requirements shift, and getting it wrong has real consequences. Currently building toward Azure AI-102 and a first agentic deployment on HESA.",
   },
   {
     icon: <StakeIcon />,
     label: "What kind of work I want",
-    text: "Build, not just advise. Systems that get deployed and used, with real stakes attached. If the data is chaotic and the requirements are unclear, I'm paying attention.",
+    text: "Build, not just advise. Systems that get deployed and used, with real stakes attached. If the domain is chaotic and the problem is genuinely unsolved, I'm paying attention.",
   },
 ];
 
