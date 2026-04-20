@@ -132,7 +132,7 @@ export function CaseStudies() {
               <div>
                 <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-accent/50 mb-1">What I learned</p>
                 <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/70">
-                  Working and right are different things. The lesson wasn't to slow down. It was to know what I was optimising for before I started.
+                  Working and right are different things. The lesson wasn&apos;t to slow down. It was to know what I was optimising for before I started.
                 </p>
               </div>
             </div>
