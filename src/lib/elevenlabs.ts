@@ -1,4 +1,7 @@
-export async function synthesise(text: string): Promise<ArrayBuffer> {
+export async function synthesise(
+  text: string,
+  previousText?: string
+): Promise<ArrayBuffer> {
   const apiKey = process.env.ELEVENLABS_API_KEY;
   const voiceId = process.env.ELEVENLABS_VOICE_ID;
 
@@ -17,9 +20,12 @@ export async function synthesise(text: string): Promise<ArrayBuffer> {
       body: JSON.stringify({
         text,
         model_id: "eleven_multilingual_v2",
+        ...(previousText ? { previous_text: previousText } : {}),
         voice_settings: {
-          stability: 0.5,
-          similarity_boost: 0.8,
+          stability: 0.63,
+          similarity_boost: 0.82,
+          style: 0.25,
+          use_speaker_boost: true,
         },
       }),
     }

@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { synthesise } from "@/lib/elevenlabs";
 
 export async function POST(req: NextRequest) {
-  const { text } = await req.json();
+  const { text, previousText } = await req.json();
 
   if (!text || typeof text !== "string" || text.trim().length === 0) {
     return new Response(JSON.stringify({ error: "text required" }), {
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const audio = await synthesise(text.slice(0, 2000)); // cap to avoid large TTS bills
+    const audio = await synthesise(text.slice(0, 2000), previousText?.slice(0, 500));
     return new Response(audio, {
       headers: {
         "Content-Type": "audio/mpeg",

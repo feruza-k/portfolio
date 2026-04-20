@@ -11,10 +11,12 @@ const ease = [0.16, 1, 0.3, 1] as const;
 type WindowWithSpeech = typeof window & { SpeechRecognition?: any; webkitSpeechRecognition?: any };
 
 const SUGGESTIONS = [
+  "Schedule a call with me",
+  "Introduce yourself",
   "Walk me through your thesis",
   "What are you building right now?",
-  "What's a technical decision you regret?",
-  "Schedule a call with Feruza",
+  "How did you get started in AI / engineering?",
+  "How does your AI agent actually work?"
 ];
 
 // ── Typewriter ─────────────────────────────────────────────────────────────────
@@ -288,6 +290,7 @@ export function Agent() {
   const spokenIds = useRef<Set<string>>(new Set());
   const ttsState = useRef<{ msgId: string; sentChars: number } | null>(null);
   const audioQueue = useRef<Promise<void>>(Promise.resolve());
+  const lastSpokenText = useRef<string>("");
   const sendMessageRef = useRef(sendMessage);
   useEffect(() => { sendMessageRef.current = sendMessage; }, [sendMessage]);
   useEffect(() => { voiceActiveRef.current = voiceActive; }, [voiceActive]);
@@ -313,10 +316,19 @@ export function Agent() {
       cutoff = newText.length;
       spokenIds.current.add(last.id);
     } else {
-      const matches = Array.from(newText.matchAll(/[.!?]+[\s\n]/g));
-      if (matches.length === 0) return;
-      const lastMatch = matches[matches.length - 1];
-      cutoff = lastMatch.index! + lastMatch[0].length;
+      const sentenceMatches = Array.from(newText.matchAll(/[.!?]+[\s\n]/g));
+      if (sentenceMatches.length > 0) {
+        const lastMatch = sentenceMatches[sentenceMatches.length - 1];
+        cutoff = lastMatch.index! + lastMatch[0].length;
+      } else if (newText.length > 120) {
+        // No sentence boundary yet but enough text — fire at last comma/semicolon
+        const clauseMatches = Array.from(newText.matchAll(/[,;]\s/g));
+        if (clauseMatches.length === 0) return;
+        const lastMatch = clauseMatches[clauseMatches.length - 1];
+        cutoff = lastMatch.index! + lastMatch[0].length;
+      } else {
+        return;
+      }
     }
 
     if (cutoff === 0) return;
@@ -324,24 +336,64 @@ export function Agent() {
     if (!toSpeak) return;
     ttsState.current.sentChars += cutoff;
 
+    const previousText = lastSpokenText.current;
+    lastSpokenText.current = toSpeak;
+
+    // Pre-fetch immediately — runs in parallel while previous clip plays
+    const fetchPromise = (async () => {
+      const r = await fetch("/api/voice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: toSpeak, previousText }),
+      });
+      if (!r.ok) return null;
+      const arrayBuffer = await r.arrayBuffer();
+      const audioCtx = audioCtxRef.current;
+      if (!audioCtx) return null;
+      return audioCtx.decodeAudioData(arrayBuffer);
+    })();
+
     audioQueue.current = audioQueue.current.then(async () => {
       setIsSpeaking(true);
       setCaption(toSpeak);
       try {
-        const r = await fetch("/api/voice", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: toSpeak }),
-        });
-        if (!r.ok) return;
-        const arrayBuffer = await r.arrayBuffer();
         const audioCtx = audioCtxRef.current;
         if (!audioCtx) return;
-        const decoded = await audioCtx.decodeAudioData(arrayBuffer);
+        const decoded = await fetchPromise;
+        if (!decoded) return;
         await new Promise<void>((resolve) => {
           const source = audioCtx.createBufferSource();
           source.buffer = decoded;
-          source.connect(audioCtx.destination);
+
+          // High-pass filter: removes low-frequency rumble from voice clone
+          const highpass = audioCtx.createBiquadFilter();
+          highpass.type = "highpass";
+          highpass.frequency.value = 90;
+          highpass.Q.value = 0.7;
+
+          // Compressor: tightens dynamics, pushes noise floor down relative to speech
+          const compressor = audioCtx.createDynamicsCompressor();
+          compressor.threshold.value = -28;
+          compressor.knee.value = 10;
+          compressor.ratio.value = 8;
+          compressor.attack.value = 0.004;
+          compressor.release.value = 0.2;
+
+          // Gain with fade-in/out for smooth clip transitions
+          const gain = audioCtx.createGain();
+          const fade = 0.06;
+          const dur = decoded.duration;
+          const t = audioCtx.currentTime;
+          gain.gain.setValueAtTime(0, t);
+          gain.gain.linearRampToValueAtTime(1, t + fade);
+          gain.gain.setValueAtTime(1, t + Math.max(dur - fade, fade));
+          gain.gain.linearRampToValueAtTime(0, t + dur);
+
+          source.connect(highpass);
+          highpass.connect(compressor);
+          compressor.connect(gain);
+          gain.connect(audioCtx.destination);
+
           source.onended = () => { audioSourceRef.current = null; resolve(); };
           audioSourceRef.current = source;
           source.start(0);
@@ -438,6 +490,7 @@ export function Agent() {
     setVoiceActive(true);
     messages.filter((m) => m.role === "assistant").forEach((m) => spokenIds.current.add(m.id));
     ttsState.current = null;
+    lastSpokenText.current = "";
     setTimeout(() => startListeningRef.current(), 50);
   }, [voiceActive, messages]);
 
@@ -655,16 +708,29 @@ export function Agent() {
           transition={{ delay: 0.4, duration: 0.6, ease }}
           className="mt-4 flex flex-wrap gap-2"
         >
-          {SUGGESTIONS.map((s) => (
-            <button
-              key={s}
-              onClick={() => sendMessage({ text: s })}
-              disabled={isLoading}
-              className="rounded-lg border border-border/40 bg-card/30 px-3.5 py-2 font-mono text-[11px] text-muted-fg/70 transition-all duration-300 hover:border-primary/30 hover:text-primary hover:bg-primary/[0.03] disabled:opacity-30"
-            >
-              {s}
-            </button>
-          ))}
+          {SUGGESTIONS.map((s) => {
+            const isSchedule = s.startsWith("Schedule");
+            return (
+              <button
+                key={s}
+                onClick={() => sendMessage({ text: s })}
+                disabled={isLoading}
+                className={
+                  isSchedule
+                    ? "rounded-lg border border-primary/50 bg-primary/[0.07] px-3.5 py-2 font-mono text-[11px] text-primary/90 shadow-[0_0_12px_hsl(var(--primary)/0.15)] transition-all duration-300 hover:border-primary/80 hover:bg-primary/[0.13] hover:shadow-[0_0_18px_hsl(var(--primary)/0.28)] disabled:opacity-30 flex items-center gap-1.5"
+                    : "rounded-lg border border-border/40 bg-card/30 px-3.5 py-2 font-mono text-[11px] text-muted-fg/70 transition-all duration-300 hover:border-primary/30 hover:text-primary hover:bg-primary/[0.03] disabled:opacity-30"
+                }
+              >
+                {isSchedule && (
+                  <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                    <rect x="1" y="3" width="14" height="12" rx="1.5" />
+                    <path d="M5 1v4M11 1v4M1 7h14" />
+                  </svg>
+                )}
+                {s}
+              </button>
+            );
+          })}
         </motion.div>
       </div>
     </section>
