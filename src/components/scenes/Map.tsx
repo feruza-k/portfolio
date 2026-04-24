@@ -74,7 +74,7 @@ export function Map() {
           transition={{ duration: 0.8, delay: 0.1, ease }}
           className="rounded-2xl overflow-hidden glow-primary-strong"
         >
-          <MapClient filterOptions={["All", "Very High Success", "High Success", "Medium Success", "Low Success"]} />
+          <MapClient />
         </motion.div>
 
         {/* Below map */}

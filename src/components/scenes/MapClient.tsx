@@ -8,6 +8,7 @@ import {
   GeoJSON,
   ZoomControl,
 } from "react-leaflet";
+import { parseCSV } from "@/lib/csv";
 import type { GeoJsonObject, Feature, Geometry, GeoJsonProperties } from "geojson";
 import type { PathOptions } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -99,40 +100,6 @@ interface ChatMessage {
   text: string;
 }
 
-interface MapClientProps {
-  filterOptions: readonly Filter[];
-}
-
-// ── CSV parser ─────────────────────────────────────────────────────────────────
-
-function parseCSV(text: string): Record<string, string>[] {
-  const lines = text.trim().split("\n");
-  if (lines.length < 2) return [];
-  const headers = lines[0].split(",").map((h) => h.trim().replace(/^"|"$/g, ""));
-  return lines.slice(1).map((line) => {
-    // Handle quoted fields containing commas
-    const values: string[] = [];
-    let current = "";
-    let inQuotes = false;
-    for (const char of line) {
-      if (char === '"') {
-        inQuotes = !inQuotes;
-      } else if (char === "," && !inQuotes) {
-        values.push(current.trim());
-        current = "";
-      } else {
-        current += char;
-      }
-    }
-    values.push(current.trim());
-    const row: Record<string, string> = {};
-    headers.forEach((h, i) => {
-      row[h] = (values[i] ?? "").replace(/^"|"$/g, "").replace(/,/g, "");
-    });
-    return row;
-  });
-}
-
 // ── AHP contribution calculator ────────────────────────────────────────────────
 
 interface FactorContribution {
@@ -195,8 +162,7 @@ function formatRaw(label: string, value: number): string {
 
 // ── Main component ─────────────────────────────────────────────────────────────
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export default function MapClient(_props: MapClientProps) {
+export default function MapClient() {
   const [geoData, setGeoData] = useState<GeoJsonObject | null>(null);
   const [allStats, setAllStats] = useState<StatsRow[]>([]);
   const [activeFilter, setActiveFilter] = useState<Filter>("All");

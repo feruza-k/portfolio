@@ -8,6 +8,7 @@ import fs from "fs";
 import path from "path";
 import { getKnowledgeBase } from "@/lib/knowledge";
 import { retrieveRelevantChunks } from "@/lib/rag";
+import { parseCSV } from "@/lib/csv";
 import {
   getAvailableSlots,
   createCalendarEvent,
@@ -32,7 +33,7 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
-// ── LSOA data (loaded once, cached) ───────────────────────────────────────────
+// ── LSOA data (loaded once, cached) ──────────────────────────────────────────
 
 interface LSOARow {
   "LSOA Code": string;
@@ -59,28 +60,6 @@ interface LSOARow {
 }
 
 let cachedLSOA: LSOARow[] | null = null;
-
-function parseCSV(text: string): Record<string, string>[] {
-  const lines = text.trim().split("\n");
-  if (lines.length < 2) return [];
-  const headers = lines[0].split(",").map((h) => h.trim().replace(/^"|"$/g, ""));
-  return lines.slice(1).map((line) => {
-    const values: string[] = [];
-    let current = "";
-    let inQuotes = false;
-    for (const char of line) {
-      if (char === '"') { inQuotes = !inQuotes; }
-      else if (char === "," && !inQuotes) { values.push(current.trim()); current = ""; }
-      else { current += char; }
-    }
-    values.push(current.trim());
-    const row: Record<string, string> = {};
-    headers.forEach((h, i) => {
-      row[h] = (values[i] ?? "").replace(/^"|"$/g, "").replace(/,/g, "");
-    });
-    return row;
-  });
-}
 
 function getLSOAData(): LSOARow[] {
   if (cachedLSOA) return cachedLSOA;
@@ -261,7 +240,16 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const body = await req.json();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let body: { messages?: any[] };
+  try {
+    body = await req.json();
+  } catch {
+    return new Response(JSON.stringify({ error: "Invalid request body" }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
   const uiMessages = body.messages ?? [];
 
   const lastUserMessage = [...uiMessages]
@@ -358,13 +346,11 @@ export async function POST(req: NextRequest) {
           const boroughNames = Array.from(new Set(data.map((r) => r.District.toLowerCase())));
           const matchedBorough = boroughNames.find((b) => q.includes(b));
           if (matchedBorough) {
-            const borough = data[0].District; // get properly cased name
             const properBorough = data.find((r) => r.District.toLowerCase() === matchedBorough)?.District ?? matchedBorough;
             const filtered = data
               .filter((r) => r.District.toLowerCase() === matchedBorough)
               .sort((a, b) => b["AHP Weighted Score"] - a["AHP Weighted Score"]);
             const top = filtered.slice(0, 8);
-            void borough;
             return (
               `${properBorough}: ${filtered.length} LSOAs. Top areas:\n` +
               top.map((r) =>

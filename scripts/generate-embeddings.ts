@@ -68,16 +68,13 @@ async function main() {
     process.exit(1);
   }
 
-  if (!fs.existsSync(thesisPath)) {
-    console.error("content/thesis-chunks.md not found");
-    process.exit(1);
-  }
-
   const kbMarkdown = fs.readFileSync(kbPath, "utf-8");
-  const thesisMarkdown = fs.readFileSync(thesisPath, "utf-8");
-
   const kbRaw = chunkBySection(kbMarkdown, "kb");
-  const thesisRaw = chunkBySection(thesisMarkdown, "thesis");
+
+  const thesisRaw = fs.existsSync(thesisPath)
+    ? chunkBySection(fs.readFileSync(thesisPath, "utf-8"), "thesis")
+    : (console.warn("content/thesis-chunks.md not found — skipping thesis chunks"), []);
+
   const allRaw = [...kbRaw, ...thesisRaw];
 
   console.log(

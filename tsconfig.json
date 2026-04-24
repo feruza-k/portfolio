@@ -22,5 +22,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "lovable inspo", "content/feruza-ai-folio-main"]
+  "exclude": ["node_modules"]
 }
