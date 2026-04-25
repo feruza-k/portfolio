@@ -84,11 +84,11 @@ across emails and spreadsheets under hard regulatory deadlines. Wrote the
 proposal, got buy-in from leadership, and has been building a full-stack
 internal compliance platform solo ever since.
 
-The platform is feature-complete for the Student Return workflow and in
-pre-production. A formal presentation to ILS and IT teams is scheduled for
-May 2025. Technical details are not shared publicly as it is an internal
-university system not yet through IT approval, but the architectural
-thinking around the planned AI layer is something she is happy to discuss.
+The platform is feature-complete for the Student Return workflow and went
+through a formal presentation to ILS and IT teams in May 2025. Technical
+details are not shared publicly as it is an internal university system, but
+the architectural thinking around the planned AI layer is something she is
+happy to discuss.
 
 The AI assistant layer is the next phase: a context-aware co-pilot for the
 returns team, with a hard constraint that the model never guesses on a
@@ -243,7 +243,7 @@ Proficient: GeoPandas, Folium, spaCy, NLP pipelines, scikit-learn, pandas,
 lxml, REST API design, shadcn/ui.
 
 Currently learning: Docker, LangChain, vector databases, Azure AI Services,
-Azure AI-102 exam on April 29, 2026.
+Azure AI-102.
 
 Deliberately not claiming: Azure OpenAI in production (planned for HESA Hub
 AI layer, not yet built).
@@ -355,19 +355,18 @@ what gets logged, who audits it. Designing constraints first is harder than
 building the system. Most demos skip that step because the stakes are not real.
 
 "What are you building right now?"
-Three things. The HESA Hub at work, the Student Return workflow is
+Two things. The HESA Hub at work, the Student Return workflow is
 feature-complete and I am now designing the AI assistant layer with a hard
 constraint that the model never guesses on a compliance rule. This portfolio
 site, a Claude agent with sentence-level TTS streaming, RAG on my thesis,
 and autonomous calendar booking. The agent you are talking to is the most
-honest demo I can think of. And preparing for the Azure AI-102 exam on
-April 29.
+honest demo I can think of.
 
 "What are you not good at yet?"
 Acknowledging achievements takes real effort. I know the work is good but
 putting a title on it takes courage. Technically, the cloud. I am actively
 learning it by doing small projects and following courses, not just watching
-videos. LifeOS on Railway, the portfolio on Vercel, Azure AI-102 coming up.
+videos. LifeOS on Railway, the portfolio on Vercel, Azure AI-102.
 
 "Walk me through your thesis."
 74% of new cafes in the UK fail within five years, usually because of bad site selection. The thesis was about whether data could do that decision better. I built a framework across 4,835 London neighbourhoods to predict where a cafe has a real chance and where the rent is still below what the market should be charging. That combination is what actually matters — high success potential alone is not enough if the rent has already priced in the opportunity. The interesting finding was that public transport access dominated the model, more than demographics or foot traffic proxies. Happy to go into the methodology if that is useful.
