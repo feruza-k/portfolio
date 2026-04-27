@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "Feruza Kachkinbayeva — AI Engineer",
     description:
       "Applied AI Engineer in London. Building AI systems that turn complex data into decisions.",

@@ -13,7 +13,7 @@ const CARDS = [
   {
     icon: <BuildIcon />,
     label: "What I'm building toward",
-    text: "Production AI systems in complex, regulated environments — the kind where the data is messy, the requirements shift, and getting it wrong has real consequences. Currently focused on the HESA Hub AI layer and Azure AI-102.",
+    text: "Production AI systems in complex, regulated environments — the kind where the data is messy, the requirements shift, and getting it wrong has real consequences. Currently focused on the HESA Hub AI layer and Azure AI-102 (May 2026).",
   },
   {
     icon: <StakeIcon />,

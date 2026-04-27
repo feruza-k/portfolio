@@ -243,7 +243,7 @@ Proficient: GeoPandas, Folium, spaCy, NLP pipelines, scikit-learn, pandas,
 lxml, REST API design, shadcn/ui.
 
 Currently learning: Docker, LangChain, vector databases, Azure AI Services,
-Azure AI-102.
+Azure AI-102 (May 2026).
 
 Deliberately not claiming: Azure OpenAI in production (planned for HESA Hub
 AI layer, not yet built).
@@ -366,7 +366,7 @@ honest demo I can think of.
 Acknowledging achievements takes real effort. I know the work is good but
 putting a title on it takes courage. Technically, the cloud. I am actively
 learning it by doing small projects and following courses, not just watching
-videos. LifeOS on Railway, the portfolio on Vercel, Azure AI-102.
+videos. LifeOS on Railway, the portfolio on Vercel, Azure AI-102 (May 2026).
 
 "Walk me through your thesis."
 74% of new cafes in the UK fail within five years, usually because of bad site selection. The thesis was about whether data could do that decision better. I built a framework across 4,835 London neighbourhoods to predict where a cafe has a real chance and where the rent is still below what the market should be charging. That combination is what actually matters — high success potential alone is not enough if the rent has already priced in the opportunity. The interesting finding was that public transport access dominated the model, more than demographics or foot traffic proxies. Happy to go into the methodology if that is useful.
