@@ -18,7 +18,7 @@ const SUGGESTIONS = [
   "How does your AI agent actually work?"
 ];
 
-// ── Typewriter ─────────────────────────────────────────────────────────────────
+
 function useTypewriter(text: string, speed = 40) {
   const [displayed, setDisplayed] = useState("");
   const [done, setDone] = useState(false);
@@ -35,7 +35,30 @@ function useTypewriter(text: string, speed = 40) {
   return { displayed, done };
 }
 
-// ── Plasma sphere ──────────────────────────────────────────────────────────────
+// Smooths AI SDK token bursts into character-by-character output while streaming.
+// Snaps to full text the moment streaming ends so nothing is ever cut off.
+function TypewriterText({ text, active }: { text: string; active: boolean }) {
+  const [displayed, setDisplayed] = useState(active ? "" : text);
+  const textRef = useRef(text);
+
+  useEffect(() => { textRef.current = text; }, [text]);
+  useEffect(() => { if (!active) setDisplayed(text); }, [active, text]);
+  useEffect(() => {
+    if (!active) return;
+    const id = setInterval(() => {
+      setDisplayed((prev) =>
+        prev.length < textRef.current.length
+          ? textRef.current.slice(0, prev.length + 1)
+          : prev
+      );
+    }, 16);
+    return () => clearInterval(id);
+  }, [active]);
+
+  return <>{displayed}</>;
+}
+
+
 // Purple = agent speaking, Blue = user speaking, dim = idle
 type SphereState = "idle" | "agent" | "user";
 
@@ -79,7 +102,7 @@ function PlasmaCanvas({
     function lerp(a: number, b: number, k: number) { return a + (b - a) * k; }
 
     function getColour(mix: number, depth: number, alpha: number) {
-      // Blue: 99,155,255 — Purple: 167,100,255
+      // Blue: 99,155,255 / Purple: 167,100,255
       const r = Math.round(lerp(99, 167, mix));
       const g = Math.round(lerp(155 + depth * 50, 100 + depth * 40, mix));
       const b = 255;
@@ -99,7 +122,7 @@ function PlasmaCanvas({
 
       ctx.clearRect(0, 0, W, H);
 
-      // Scale sphere to window — use smaller dimension so it fits
+      // scale to container, use smaller dimension so it fits
       const R = Math.min(W, H) * 0.22 * (0.85 + a * 0.18);
       const tilt = 0.38;
 
@@ -247,7 +270,7 @@ function PlasmaCanvas({
   );
 }
 
-// ── Main Agent component ───────────────────────────────────────────────────────
+
 export function Agent() {
   const [voiceActive, setVoiceActive] = useState(false);
   const [input, setInput] = useState("");
@@ -279,11 +302,23 @@ export function Agent() {
     40
   );
 
-  // Auto scroll messages
+  // Auto scroll on new messages
   useEffect(() => {
     const el = messagesContainerRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages]);
+
+  // Keep scroll pinned to bottom during typewriter animation (only if user is near bottom)
+  useEffect(() => {
+    if (!isLoading) return;
+    const el = messagesContainerRef.current;
+    if (!el) return;
+    const id = setInterval(() => {
+      const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+      if (nearBottom) el.scrollTop = el.scrollHeight;
+    }, 50);
+    return () => clearInterval(id);
+  }, [isLoading]);
 
   // ── TTS streaming ──────────────────────────────────────────────────────────
   const spokenIds = useRef<Set<string>>(new Set());
@@ -320,7 +355,7 @@ export function Agent() {
         const lastMatch = sentenceMatches[sentenceMatches.length - 1];
         cutoff = lastMatch.index! + lastMatch[0].length;
       } else if (newText.length > 120) {
-        // No sentence boundary yet but enough text — fire at last comma/semicolon
+        // no sentence boundary yet but enough text, fire at last comma/semicolon
         const clauseMatches = Array.from(newText.matchAll(/[,;]\s/g));
         if (clauseMatches.length === 0) return;
         const lastMatch = clauseMatches[clauseMatches.length - 1];
@@ -338,7 +373,7 @@ export function Agent() {
     const previousText = lastSpokenText.current;
     lastSpokenText.current = toSpeak;
 
-    // Pre-fetch immediately — runs in parallel while previous clip plays
+    // pre-fetch immediately, runs in parallel while previous clip plays
     const fetchPromise = (async () => {
       const r = await fetch("/api/voice", {
         method: "POST",
@@ -353,13 +388,14 @@ export function Agent() {
     })();
 
     audioQueue.current = audioQueue.current.then(async () => {
-      setIsSpeaking(true);
-      setCaption(toSpeak);
       try {
         const audioCtx = audioCtxRef.current;
         if (!audioCtx) return;
         const decoded = await fetchPromise;
         if (!decoded) return;
+        // only enter speaking state once we have actual audio (prevents flicker when API fails)
+        setIsSpeaking(true);
+        setCaption(toSpeak);
         await new Promise<void>((resolve) => {
           const source = audioCtx.createBufferSource();
           source.buffer = decoded;
@@ -405,7 +441,7 @@ export function Agent() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, isLoading, voiceActive]);
 
-  // ── Web Speech API — real-time, auto-detects sentence end, loops ──────────
+  // Web Speech API: real-time recognition, auto-detects sentence end, loops
   // Defined via ref so onend can call it recursively without stale closures
   startListeningRef.current = () => {
     if (!voiceActiveRef.current || recognitionRef.current) return;
@@ -482,7 +518,7 @@ export function Agent() {
       return;
     }
 
-    // Create/resume AudioContext during user gesture — unlocks audio autoplay
+    // create/resume AudioContext during user gesture to unlock audio autoplay
     if (!audioCtxRef.current) audioCtxRef.current = new AudioContext();
     audioCtxRef.current.resume();
 
@@ -600,31 +636,38 @@ export function Agent() {
                   )}
                 </div>
               )}
-              {messages.map((m) => {
-                const text = extractText(m);
-                return (
-                  <div key={m.id}>
-                    {m.role === "user" ? (
-                      <div className="flex gap-3 font-mono text-sm">
-                        <span className="text-primary shrink-0 mt-0.5">❯</span>
-                        <span className="text-foreground">{text}</span>
-                      </div>
-                    ) : (
-                      <div className="flex gap-3 font-mono text-sm">
-                        <span className="shrink-0 mt-0.5 gradient-text">◆</span>
-                        <span className="text-muted-fg leading-relaxed whitespace-pre-wrap">
-                          {!text ? (
-                            <span className="flex items-center gap-2 text-muted-fg/60 text-xs">
-                              <LoaderIcon />
-                              thinking...
-                            </span>
-                          ) : text}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+              {(() => {
+                const lastMsg = messages[messages.length - 1];
+                const activeId = isLoading && lastMsg?.role === "assistant" ? lastMsg.id : null;
+                return messages.map((m) => {
+                  const text = extractText(m);
+                  const isActive = m.id === activeId;
+                  return (
+                    <div key={m.id}>
+                      {m.role === "user" ? (
+                        <div className="flex gap-3 font-mono text-sm items-baseline">
+                          <span className="text-primary shrink-0">❯</span>
+                          <span className="text-foreground">{text}</span>
+                        </div>
+                      ) : (
+                        <div className="flex gap-3 font-mono text-sm">
+                          <span className="shrink-0 mt-0.5 gradient-text">◆</span>
+                          <span className="text-muted-fg leading-relaxed whitespace-pre-wrap">
+                            {!text ? (
+                              <span className="flex items-center gap-2 text-muted-fg/60 text-xs">
+                                <LoaderIcon />
+                                thinking...
+                              </span>
+                            ) : isActive ? (
+                              <TypewriterText text={text} active={true} />
+                            ) : text}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                });
+              })()}
             </motion.div>
 
             {/* Plasma sphere — fills entire message area */}
@@ -736,7 +779,7 @@ export function Agent() {
   );
 }
 
-// ── Icons ──────────────────────────────────────────────────────────────────────
+
 function TerminalIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-primary" aria-hidden="true">

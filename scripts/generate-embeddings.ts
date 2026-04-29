@@ -1,15 +1,3 @@
-// scripts/generate-embeddings.ts
-//
-// Reads two files and writes one embeddings.json:
-//   content/knowledge.md       — profile KB, chunked by ## headers
-//   content/thesis-chunks.md   — thesis content, chunked by ## headers
-//
-// Each chunk gets a unique id prefixed with its source:
-//   kb:identity, kb:current-role, thesis:task1-ahp, etc.
-//
-// Run: npx ts-node scripts/generate-embeddings.ts
-// Requires: OPENAI_API_KEY in environment
-
 import fs from "fs";
 import path from "path";
 import OpenAI from "openai";

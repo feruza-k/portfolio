@@ -105,8 +105,6 @@ npm run generate-embeddings
 
 The agent picks up changes on the next request — no rebuild needed.
 
-For thesis-level RAG: create `content/thesis-chunks.md` with `##`-headed sections, then run the same command. The script skips the thesis file and warns if it is absent.
-
 ## Regenerating the map data
 
 Requires `public/data/lsoa_success_levels_with_geo.csv` and geopandas:

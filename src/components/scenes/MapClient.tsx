@@ -13,7 +13,7 @@ import type { GeoJsonObject, Feature, Geometry, GeoJsonProperties } from "geojso
 import type { PathOptions } from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// ── Types ──────────────────────────────────────────────────────────────────────
+
 
 type Filter =
   | "All"
@@ -45,7 +45,7 @@ const FILTER_LABELS: Record<Filter, string> = {
   "Low Success": "Low",
 };
 
-// ── AHP Configuration ──────────────────────────────────────────────────────────
+
 // Weights from thesis Table 2. Direction: true = higher is better, false = inverse.
 
 const AHP_FACTORS = [
@@ -63,7 +63,7 @@ const AHP_FACTORS = [
   { key: "Population 2015",             label: "Population",        weight:  1.82, positive: true },
 ] as const;
 
-// ── Statistics row type ────────────────────────────────────────────────────────
+
 
 interface StatsRow {
   "LSOA Code": string;
@@ -100,7 +100,7 @@ interface ChatMessage {
   text: string;
 }
 
-// ── AHP contribution calculator ────────────────────────────────────────────────
+
 
 interface FactorContribution {
   label: string;
@@ -160,7 +160,7 @@ function formatRaw(label: string, value: number): string {
   return value.toFixed(1);
 }
 
-// ── Main component ─────────────────────────────────────────────────────────────
+
 
 export default function MapClient() {
   const [geoData, setGeoData] = useState<GeoJsonObject | null>(null);
@@ -205,7 +205,7 @@ export default function MapClient() {
       .catch(() => console.warn("LSOA Statistics.csv not found"));
   }, []);
 
-  // Auto-scroll chat container — direct scrollTop keeps scroll inside the panel,
+  // auto-scroll chat container: direct scrollTop keeps scroll inside the panel,
   // scrollIntoView would scroll the entire page
   useEffect(() => {
     const el = chatScrollRef.current;
@@ -294,7 +294,7 @@ export default function MapClient() {
         }
       }
     } catch (err) {
-      // AbortError is intentional (user clicked a new LSOA) — don't show error
+      // AbortError is intentional (user clicked a new LSOA), skip error
       if (err instanceof Error && err.name === "AbortError") return;
       console.error("Agent error:", err);
       setChatMessages((prev) => [
@@ -358,7 +358,7 @@ export default function MapClient() {
     return feature.properties?.["Success Level"] === activeFilter;
   }
 
-  // Derive stats row reactively — recomputes when allStats arrives after a click
+  // derive stats row reactively, recomputes when allStats arrives after a click
   const selectedStats = useMemo(() => {
     if (!selected || allStats.length === 0) return null;
     return allStats.find(

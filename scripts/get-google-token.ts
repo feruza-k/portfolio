@@ -1,23 +1,3 @@
-/**
- * One-time script to get a Google OAuth2 refresh token.
- *
- * Usage:
- *   1. Create OAuth credentials in Google Cloud Console (see README or instructions below)
- *   2. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env.local
- *   3. Run: npx tsx scripts/get-google-token.ts
- *   4. Open the URL printed, authorise, paste the code back
- *   5. Copy the refresh_token value into .env.local as GOOGLE_REFRESH_TOKEN
- *
- * Required Google Cloud setup (one-time):
- *   - Go to console.cloud.google.com
- *   - Create a project (or use existing)
- *   - APIs & Services → Enable APIs → enable "Google Calendar API"
- *   - APIs & Services → Credentials → Create Credentials → OAuth client ID
- *   - Application type: Desktop app → Download JSON
- *   - Copy client_id and client_secret from the JSON into .env.local
- *   - OAuth consent screen → Add your own Gmail as a test user
- */
-
 import * as readline from "readline";
 import * as https from "https";
 import * as fs from "fs";
