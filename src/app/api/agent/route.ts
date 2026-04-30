@@ -420,6 +420,7 @@ export async function POST(req: NextRequest) {
           reason: z.string(),
         }),
         execute: async ({ company, role, reason }: { company: string; role: string; reason: string }) => {
+          console.log("[booking]", company, "|", role, "|", reason);
           if (!isCalendarConfigured()) {
             return [
               `Booking recorded: ${company}, ${role}, ${reason}`,

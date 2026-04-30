@@ -47,6 +47,11 @@ function chunkBySection(
 }
 
 async function main() {
+  if (!process.env.OPENAI_API_KEY) {
+    console.warn("OPENAI_API_KEY not set — skipping embedding generation");
+    process.exit(0);
+  }
+
   const kbPath = path.join(process.cwd(), "content", "knowledge.md");
   const thesisPath = path.join(process.cwd(), "content", "thesis-chunks.md");
   const outPath = path.join(process.cwd(), "content", "embeddings.json");

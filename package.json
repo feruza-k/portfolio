@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npx tsx scripts/generate-embeddings.ts && next build",
     "start": "next start",
     "lint": "next lint",
     "generate-embeddings": "npx tsx --env-file=.env.local scripts/generate-embeddings.ts"
