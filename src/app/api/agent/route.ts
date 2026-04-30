@@ -129,15 +129,15 @@ function isThesisQuery(text: string): boolean {
   return THESIS_SIGNALS.some((s) => lower.includes(s));
 }
 
-function isThesisConversation(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  uiMessages: any[]
-): boolean {
-  // If any of the last 4 user messages contained thesis signals, stay in thesis context
-  const recent = [...uiMessages]
+const FOLLOWUP_SIGNALS = /^(what|how|why|when|where|which|who|tell|can you|could you|explain|walk|go deeper|more about|what about|and the|so the)/i;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isThesisFollowUp(lastUserText: string, uiMessages: any[]): boolean {
+  if (!FOLLOWUP_SIGNALS.test(lastUserText.trim()) && !lastUserText.includes("?")) return false;
+  const prevUserMessages = [...uiMessages]
     .filter((m) => m.role === "user")
-    .slice(-4);
-  return recent.some((m) => {
+    .slice(-3, -1);
+  return prevUserMessages.some((m) => {
     const text = (m.parts ?? [])
       .filter((p: { type: string }) => p.type === "text")
       .map((p: { type: string; text: string }) => p.text)
@@ -283,8 +283,10 @@ export async function POST(req: NextRequest) {
       .map((p: { type: string; text: string }) => p.text)
       .join(" ") ?? "";
 
+  if (lastUserText) console.log("[q]", lastUserText.slice(0, 400));
+
   let thesisContext: string | undefined;
-  if (isThesisQuery(lastUserText) || isThesisConversation(uiMessages)) {
+  if (isThesisQuery(lastUserText) || isThesisFollowUp(lastUserText, uiMessages)) {
     try {
       thesisContext = await retrieveRelevantChunks(lastUserText, 3);
     } catch (err) {
