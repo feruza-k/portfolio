@@ -283,7 +283,7 @@ export async function POST(req: NextRequest) {
   const messages = await convertToModelMessages(uiMessages);
 
   const result = streamText({
-    model: anthropic("claude-sonnet-4.6"),
+    model: anthropic("claude-sonnet-4-6"),
     system: buildSystemPrompt(profileKb, thesisContext),
     messages,
     tools: {
