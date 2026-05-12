@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport } from "ai";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapContainer,
@@ -95,11 +97,6 @@ interface SelectedLSOA {
   stats: StatsRow | null;
 }
 
-interface ChatMessage {
-  role: "user" | "assistant";
-  text: string;
-}
-
 
 
 interface FactorContribution {
@@ -169,15 +166,9 @@ export default function MapClient() {
   const [error, setError] = useState(false);
   const [selected, setSelected] = useState<SelectedLSOA | null>(null);
   const [panelTab, setPanelTab] = useState<"chart" | "chat">("chart");
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-  const [chatInput, setChatInput] = useState("");
-  const [chatLoading, setChatLoading] = useState(false);
-  const [initialMessageSent, setInitialMessageSent] = useState(false);
-  const chatScrollRef = useRef<HTMLDivElement>(null);
-  const chatInputRef = useRef<HTMLInputElement>(null);
-  const abortRef = useRef<AbortController | null>(null);
-  const [showHint, setShowHint] = useState(false);
+  const [initialMapClickMessage, setInitialMapClickMessage] = useState("");
   const hintDismissed = useRef(false);
+  const [showHint, setShowHint] = useState(false);
 
   // Load GeoJSON
   useEffect(() => {
@@ -205,115 +196,6 @@ export default function MapClient() {
       .catch(() => console.warn("LSOA Statistics.csv not found"));
   }, []);
 
-  // auto-scroll chat container: direct scrollTop keeps scroll inside the panel,
-  // scrollIntoView would scroll the entire page
-  useEffect(() => {
-    const el = chatScrollRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [chatMessages]);
-
-  // When LSOA selected, send initial message to agent
-  useEffect(() => {
-    if (!selected || initialMessageSent) return;
-    setInitialMessageSent(true);
-
-    const initialMessage = `[MAP_CLICK] LSOA: ${selected.code} | Name: ${selected.name} | Success: ${selected.successLevel} | AHP Score: ${selected.ahpScore.toLocaleString()}${
-      selected.stats
-        ? ` | District: ${(selected.stats as unknown as Record<string, string>)["District"]} | Zone: ${(selected.stats as unknown as Record<string, string>)["London Zone"]} | PT Access: ${selected.stats["PT Accessibility Levels 2014"]} | House Price: £${Number(selected.stats["Median House Price 2023"]).toLocaleString()} | Crime: ${selected.stats["Crime Rate per 1000"]}/1k | Income: £${Number(selected.stats["Average Income"]).toLocaleString()} | Competitors: ${selected.stats["Competitors"]} | Amenities: ${selected.stats["Amenities"]} | Deprivation: ${selected.stats["Index of Multiple Deprivation"]}`
-        : ""
-    }`;
-
-    sendToAgent(initialMessage, []);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
-
-  async function sendToAgent(text: string, history: ChatMessage[]) {
-    // Cancel any previous in-flight request
-    abortRef.current?.abort();
-    const abort = new AbortController();
-    abortRef.current = abort;
-
-    setChatLoading(true);
-    const userMsg: ChatMessage = { role: "user", text };
-    const newHistory = [...history, userMsg];
-    setChatMessages(newHistory);
-
-    try {
-      const response = await fetch("/api/agent", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: newHistory.map((m, i) => ({
-            id: String(i),
-            role: m.role,
-            parts: [{ type: "text", text: m.text }],
-          })),
-        }),
-        signal: abort.signal,
-      });
-
-      if (!response.ok || !response.body) throw new Error("Agent error");
-
-      // Stream the response
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let assistantText = "";
-
-      setChatMessages((prev) => [
-        ...prev,
-        { role: "assistant", text: "" },
-      ]);
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
-
-        for (const line of lines) {
-          if (!line.startsWith("data: ")) continue;
-          const data = line.slice(6).trim();
-          if (data === "[DONE]") continue;
-          try {
-            const parsed = JSON.parse(data);
-            if (parsed.type === "text-delta" && parsed.delta) {
-              assistantText += parsed.delta;
-              setChatMessages((prev) => {
-                const updated = [...prev];
-                updated[updated.length - 1] = {
-                  role: "assistant",
-                  text: assistantText,
-                };
-                return updated;
-              });
-            }
-          } catch {
-            // skip malformed lines
-          }
-        }
-      }
-    } catch (err) {
-      // AbortError is intentional (user clicked a new LSOA), skip error
-      if (err instanceof Error && err.name === "AbortError") return;
-      console.error("Agent error:", err);
-      setChatMessages((prev) => [
-        ...prev,
-        { role: "assistant", text: "Something went wrong. Try again." },
-      ]);
-    } finally {
-      setChatLoading(false);
-    }
-  }
-
-  function handleChatSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const trimmed = chatInput.trim();
-    if (!trimmed || chatLoading) return;
-    setChatInput("");
-    sendToAgent(trimmed, chatMessages);
-  }
-
   function handleLSOAClick(
     code: string,
     name: string,
@@ -326,17 +208,19 @@ export default function MapClient() {
 
     hintDismissed.current = true;
     setShowHint(false);
-    // Cancel any in-flight stream before switching LSOAs
-    abortRef.current?.abort();
-    abortRef.current = null;
 
     // Only default to chart tab when the panel is first opening.
-    // If the panel is already open, preserve whichever tab the user is on.
     if (!selected) setPanelTab("chart");
 
     setSelected({ code, name, successLevel, ahpScore, stats: statsRow });
-    setChatMessages([]);
-    setInitialMessageSent(false);
+
+    // Build the MAP_CLICK message at click time with whatever stats are loaded.
+    const msg =
+      `[MAP_CLICK] LSOA: ${code} | Name: ${name} | Success: ${successLevel} | AHP Score: ${ahpScore.toLocaleString()}` +
+      (statsRow
+        ? ` | District: ${(statsRow as unknown as Record<string, string>)["District"]} | Zone: ${(statsRow as unknown as Record<string, string>)["London Zone"]} | PT Access: ${statsRow["PT Accessibility Levels 2014"]} | House Price: £${Number(statsRow["Median House Price 2023"]).toLocaleString()} | Crime: ${statsRow["Crime Rate per 1000"]}/1k | Income: £${Number(statsRow["Average Income"]).toLocaleString()} | Competitors: ${statsRow["Competitors"]} | Amenities: ${statsRow["Amenities"]} | Deprivation: ${statsRow["Index of Multiple Deprivation"]}`
+        : "");
+    setInitialMapClickMessage(msg);
   }
 
   function styleFeature(
@@ -593,64 +477,12 @@ export default function MapClient() {
               </div>
             )}
 
-            {/* Chat tab */}
+            {/* Chat tab — keyed on LSOA code so it fully remounts on area change */}
             {panelTab === "chat" && (
-              <div className="flex-1 flex flex-col overflow-hidden">
-                {/* Messages */}
-                <div ref={chatScrollRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
-                  {chatMessages.length === 0 && chatLoading && (
-                    <div className="flex items-center gap-2 text-[#6b7280] font-mono text-[11px]">
-                      <span className="animate-spin inline-block w-3 h-3 border border-[#4fc4a0] border-t-transparent rounded-full" />
-                      thinking...
-                    </div>
-                  )}
-                  {chatMessages.map((m, i) => (
-                    <div key={i}>
-                      {m.role === "user" ? (
-                        <div className="flex gap-2">
-                          <span className="text-[#4fc4a0] font-mono text-[11px] shrink-0 mt-0.5">❯</span>
-                          <span className="font-mono text-[11px] text-[#f2ede6]">{m.text.replace(/^\[MAP_CLICK\].*$/, "").trim() || "Tell me about this area"}</span>
-                        </div>
-                      ) : (
-                        <div className="flex gap-2">
-                          <span className="text-[#4fc4a0] font-mono text-[11px] shrink-0 mt-0.5">◆</span>
-                          <span className="font-mono text-[11px] text-[#9b9b9b] leading-relaxed whitespace-pre-wrap">
-                            {m.text || (
-                              <span className="flex items-center gap-1.5">
-                                <span className="animate-spin inline-block w-3 h-3 border border-[#4fc4a0] border-t-transparent rounded-full" />
-                                thinking...
-                              </span>
-                            )}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Chat input */}
-                <form
-                  onSubmit={handleChatSubmit}
-                  className="flex items-center gap-2 border-t border-[#1f1f23] px-4 py-2.5 shrink-0"
-                >
-                  <span className="font-mono text-[10px] text-[#4fc4a0]/40 select-none">$</span>
-                  <input
-                    ref={chatInputRef}
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    placeholder="Ask about this area..."
-                    disabled={chatLoading}
-                    className="flex-1 bg-transparent font-mono text-[11px] text-[#f2ede6] placeholder:text-[#6b7280] focus:outline-none disabled:opacity-40"
-                  />
-                  <button
-                    type="submit"
-                    disabled={chatLoading || !chatInput.trim()}
-                    className="font-mono text-[10px] text-[#4fc4a0] disabled:opacity-30 hover:text-[#f2ede6] transition-colors"
-                  >
-                    send
-                  </button>
-                </form>
-              </div>
+              <MapChat
+                key={selected.code}
+                initialMessage={initialMapClickMessage}
+              />
             )}
           </div>
         )}
@@ -662,6 +494,103 @@ export default function MapClient() {
           click any area to analyse its AHP breakdown and ask questions
         </p>
       )}
+    </div>
+  );
+}
+
+
+function MapChat({ initialMessage }: { initialMessage: string }) {
+  const { messages, sendMessage, status } = useChat({
+    transport: new DefaultChatTransport({ api: "/api/agent" }),
+  });
+  const isLoading = status === "streaming" || status === "submitted";
+  const [chatInput, setChatInput] = useState("");
+  const chatScrollRef = useRef<HTMLDivElement>(null);
+
+  // Send the MAP_CLICK context message once on mount
+  useEffect(() => {
+    if (initialMessage) sendMessage({ text: initialMessage });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Auto-scroll as messages arrive
+  useEffect(() => {
+    const el = chatScrollRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages]);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const trimmed = chatInput.trim();
+    if (!trimmed || isLoading) return;
+    sendMessage({ text: trimmed });
+    setChatInput("");
+  }
+
+  return (
+    <div className="flex-1 flex flex-col overflow-hidden">
+      {/* Messages */}
+      <div ref={chatScrollRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+        {messages.length === 0 && isLoading && (
+          <div className="flex items-center gap-2 text-[#6b7280] font-mono text-[11px]">
+            <span className="animate-spin inline-block w-3 h-3 border border-[#4fc4a0] border-t-transparent rounded-full" />
+            thinking...
+          </div>
+        )}
+        {messages.map((m) => {
+          const text =
+            m.parts
+              ?.filter((p) => p.type === "text")
+              .map((p) => (p as { type: "text"; text: string }).text)
+              .join("") ?? "";
+          return (
+            <div key={m.id}>
+              {m.role === "user" ? (
+                <div className="flex gap-2">
+                  <span className="text-[#4fc4a0] font-mono text-[11px] shrink-0 mt-0.5">❯</span>
+                  <span className="font-mono text-[11px] text-[#f2ede6]">
+                    {text.replace(/^\[MAP_CLICK\][^\n]*\n?/, "").trim() || "Tell me about this area"}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <span className="text-[#4fc4a0] font-mono text-[11px] shrink-0 mt-0.5">◆</span>
+                  <span className="font-mono text-[11px] text-[#9b9b9b] leading-relaxed whitespace-pre-wrap">
+                    {text || (
+                      <span className="flex items-center gap-1.5">
+                        <span className="animate-spin inline-block w-3 h-3 border border-[#4fc4a0] border-t-transparent rounded-full" />
+                        thinking...
+                      </span>
+                    )}
+                  </span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Chat input */}
+      <form
+        onSubmit={handleSubmit}
+        className="flex items-center gap-2 border-t border-[#1f1f23] px-4 py-2.5 shrink-0"
+      >
+        <span className="font-mono text-[10px] text-[#4fc4a0]/40 select-none">$</span>
+        <input
+          value={chatInput}
+          onChange={(e) => setChatInput(e.target.value)}
+          placeholder="Ask about this area..."
+          disabled={isLoading}
+          className="flex-1 bg-transparent font-mono text-[11px] text-[#f2ede6] placeholder:text-[#6b7280] focus:outline-none disabled:opacity-40"
+        />
+        <button
+          type="submit"
+          disabled={isLoading || !chatInput.trim()}
+          className="font-mono text-[10px] text-[#4fc4a0] disabled:opacity-30 hover:text-[#f2ede6] transition-colors"
+        >
+          send
+        </button>
+      </form>
     </div>
   );
 }
