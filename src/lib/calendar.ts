@@ -36,7 +36,7 @@ async function getAccessToken(): Promise<string> {
 }
 
 // BST offset: returns 1 during summer time, 0 otherwise
-function getLondonUTCOffset(date: Date): number {
+export function getLondonUTCOffset(date: Date): number {
   const fmt = new Intl.DateTimeFormat("en-GB", {
     timeZone: TIMEZONE,
     year: "numeric", month: "2-digit", day: "2-digit",

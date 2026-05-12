@@ -14,7 +14,10 @@ export function parseCSV(text: string): Record<string, string>[] {
     values.push(current.trim());
     const row: Record<string, string> = {};
     headers.forEach((h, i) => {
-      row[h] = (values[i] ?? "").replace(/^"|"$/g, "").replace(/,/g, "");
+      const raw = (values[i] ?? "").replace(/^"|"$/g, "");
+      // Only strip formatting commas from values that are purely numeric (e.g. "1,234").
+      // Text fields that legitimately contain commas must be preserved.
+      row[h] = /^[\d,]+(\.\d+)?$/.test(raw) ? raw.replace(/,/g, "") : raw;
     });
     return row;
   });
