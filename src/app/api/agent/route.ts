@@ -13,24 +13,7 @@ import {
   createCalendarEvent,
   isCalendarConfigured,
 } from "@/lib/calendar";
-
-// Rate limiting
-
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT = 20;
-const WINDOW_MS = 60 * 60 * 1000;
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return true;
-  }
-  if (entry.count >= RATE_LIMIT) return false;
-  entry.count++;
-  return true;
-}
+import { agentLimiter } from "@/lib/ratelimit";
 
 // LSOA data (loaded once, cached)
 
@@ -242,11 +225,14 @@ ${profileKb}`;
 export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
 
-  if (!checkRateLimit(ip)) {
-    return new Response(JSON.stringify({ error: "Rate limit exceeded" }), {
-      status: 429,
-      headers: { "Content-Type": "application/json" },
-    });
+  if (agentLimiter) {
+    const { success } = await agentLimiter.limit(ip);
+    if (!success) {
+      return new Response(JSON.stringify({ error: "Rate limit exceeded" }), {
+        status: 429,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
   }
 
   let profileKb: string;
@@ -297,7 +283,7 @@ export async function POST(req: NextRequest) {
   const messages = await convertToModelMessages(uiMessages);
 
   const result = streamText({
-    model: anthropic("claude-sonnet-4-6"),
+    model: anthropic("claude-sonnet-4.6"),
     system: buildSystemPrompt(profileKb, thesisContext),
     messages,
     tools: {
