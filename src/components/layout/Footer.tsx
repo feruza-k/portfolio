@@ -28,7 +28,7 @@ export function Footer() {
             Let&apos;s build something that matters.
           </p>
           <p className="text-sm text-muted-fg/60">
-            Open to AI engineering roles.
+            Open to applied ML and data science roles.
           </p>
         </div>
 

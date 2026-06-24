@@ -37,3 +37,6 @@ next-env.d.ts
 
 # generated embeddings (rebuild locally with npm run generate-embeddings)
 content/embeddings.json
+
+# private content — thesis source used only for embedding generation, not deployed directly
+content/thesis-chunks.md

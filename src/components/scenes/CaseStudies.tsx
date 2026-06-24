@@ -11,13 +11,91 @@ export function CaseStudies() {
 
       <div className="relative mx-auto max-w-5xl grid gap-8 lg:grid-cols-2">
 
-        {/* HESA */}
+        {/* Location Intelligence / MSc Thesis — first, full width */}
         <motion.article
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, ease }}
-          className="group relative glass-card-hover rounded-2xl overflow-hidden"
+          className="group relative rounded-2xl overflow-hidden lg:col-span-2 border border-border/60 bg-white/[0.025] backdrop-blur-xl shadow-[0_0_28px_hsl(var(--primary)/0.05),inset_0_1px_0_hsl(var(--primary)/0.04)] transition-all duration-300 hover:border-primary/25 hover:bg-white/[0.045] hover:-translate-y-0.5"
+        >
+          <div className="h-1 bg-gradient-to-r from-emerald-500/30 via-emerald-400/20 to-emerald-500/0" />
+
+          <div className="p-6 sm:p-8 flex flex-col h-full">
+            {/* Meta row */}
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-card/80 text-emerald-400 border border-border/50">
+                  <MapPinIcon />
+                </div>
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-fg/60">
+                  University of Greenwich · MSc Thesis 2024
+                </span>
+              </div>
+              <span className="font-mono text-[10px] text-terminal-green/80">Distinction</span>
+            </div>
+
+            {/* Title + award */}
+            <h3 className="font-display text-xl font-semibold text-foreground mb-1">
+              Location Intelligence — Café Site Selection
+            </h3>
+            <div className="flex items-center gap-1.5 mb-7">
+              <AwardIcon />
+              <span className="font-mono text-[10px] text-emerald-400/80">
+                SLA Masters Award 2024 · 2nd Place
+              </span>
+            </div>
+
+            {/* Content — two-column on large screens */}
+            <div className="grid gap-5 lg:grid-cols-2 text-[13px] leading-relaxed flex-1">
+              <div className="space-y-5">
+                <div>
+                  <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-emerald-500/50 mb-1">Problem</p>
+                  <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
+                    74% of new cafés in the UK fail within five years. Site selection costs £50,000+ to get wrong and most decisions rely on gut instinct and borough-level demographics that miss how dramatically conditions vary within short distances across London.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-emerald-500/50 mb-1">What it does</p>
+                  <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
+                    A three-task data-driven framework across 4,835 London LSOAs at granular sub-borough level. Task one: predict café success potential by area. Task two: predict commercial rent prices. Task three: find the intersection where success potential is high and rent is below market rate — that is where you open.
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-5">
+                <div>
+                  <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-emerald-500/50 mb-1">Key finding</p>
+                  <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
+                    Public transport accessibility dominated the model (16.92% AHP weight), above median house price, demographics, or foot traffic proxies. The more commercially valuable output was identifying emerging neighbourhoods with medium-high success scores not visible in traditional market research — areas that conventional consultancy would miss entirely.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-emerald-500/50 mb-1">Scale</p>
+                  <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
+                    16,361-word dissertation covering multi-source data integration, AHP weighting methodology, geospatial ML modelling, and rent prediction — then synthesised into an interactive map deployed as part of this portfolio.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Tech */}
+            <div className="mt-auto pt-5 border-t border-border/30 flex flex-wrap gap-2">
+              {["Python", "GeoPandas", "scikit-learn", "AHP", "Folium", "PostgreSQL", "Geospatial ML"].map((t) => (
+                <span key={t} className="border-l-2 border-border/30 pl-2 font-mono text-[10px] text-muted-fg/40">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        </motion.article>
+
+        {/* HESA */}
+        <motion.article
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8, delay: 0.1, ease }}
+          className="group relative rounded-2xl overflow-hidden border border-border/60 bg-white/[0.025] backdrop-blur-xl shadow-[0_0_28px_hsl(var(--primary)/0.05),inset_0_1px_0_hsl(var(--primary)/0.04)] transition-all duration-300 hover:border-primary/25 hover:bg-white/[0.045] hover:-translate-y-0.5"
         >
           <div className="h-1 bg-gradient-to-r from-primary/30 to-primary/0" />
 
@@ -50,19 +128,19 @@ export function CaseStudies() {
             <div className="space-y-5 text-[13px] leading-relaxed flex-1">
               <div>
                 <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-primary/50 mb-1">Problem</p>
-                <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/70">
+                <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
                   HESA statutory returns are a regulated workflow with hard deadlines. Missed sign-off gets reported to the Office for Students. The existing process ran on Banner extracts, Python and Alteryx scripts, Excel trackers, email chains. Hundreds of quality rules per cycle, no central view, no audit trail.
                 </p>
               </div>
               <div>
                 <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-primary/50 mb-1">What it does</p>
-                <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/70">
+                <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
                   Governance and submission pipeline in one tool. Role-based access, invitations, append-only audit log, multi-institution dashboard with risk scoring. The pipeline handles XML upload, lxml-based XSD validation, OVT quality report ingestion, per-rule triage and team assignment, failure drill-down, and Core File generation from the 28 TSV outputs HESA returns after sign-off.
                 </p>
               </div>
               <div>
                 <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-accent/50 mb-1">In progress</p>
-                <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/70">
+                <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
                   LLM module on Azure OpenAI with RAG over 200+ pages of regulatory guidance. Natural-language rule queries, tolerance-request drafting, schema-change summaries. Next phase: an agent layer that updates pipeline scripts behind a review gate, generates visualisations on demand, and drives the triage loop from intent.
                 </p>
               </div>
@@ -84,8 +162,8 @@ export function CaseStudies() {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.8, delay: 0.1, ease }}
-          className="group relative glass-card-hover rounded-2xl overflow-hidden"
+          transition={{ duration: 0.8, delay: 0.2, ease }}
+          className="group relative rounded-2xl overflow-hidden border border-border/60 bg-white/[0.025] backdrop-blur-xl shadow-[0_0_28px_hsl(var(--primary)/0.05),inset_0_1px_0_hsl(var(--primary)/0.04)] transition-all duration-300 hover:border-primary/25 hover:bg-white/[0.045] hover:-translate-y-0.5"
         >
           <div className="h-1 bg-gradient-to-r from-accent/20 to-accent/0" />
 
@@ -119,19 +197,19 @@ export function CaseStudies() {
             <div className="space-y-5 text-[13px] leading-relaxed flex-1">
               <div>
                 <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-accent/50 mb-1">What it is</p>
-                <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/70">
+                <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
                   A mobile-first personal operating system. Today view with energy tracking, calendar, goals, check-ins, analytics, and a conversational assistant with persistent memory. Full-stack, deployed, in daily use since Day 31.
                 </p>
               </div>
               <div>
                 <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-accent/50 mb-1">Architecture decision</p>
-                <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/70">
+                <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
                   The memory system went through three versions in three days. Store everything. Inject everything. Score and select. The first two were thorough. Only the third was useful. The problem was never storage — it was knowing what matters right now. The assistant uses selective injection: memories are scored against the current context and only passed to the model above a relevance threshold.
                 </p>
               </div>
               <div>
                 <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-accent/50 mb-1">What I learned</p>
-                <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/70">
+                <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
                   Working and right are different things. The lesson wasn&apos;t to slow down. It was to know what I was optimising for before I started.
                 </p>
               </div>
@@ -164,4 +242,7 @@ function AwardIcon() {
 }
 function ArrowUpRightIcon() {
   return <svg width="10" height="10" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M5 15L15 5M15 5H8M15 5v7"/></svg>;
+}
+function MapPinIcon() {
+  return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>;
 }

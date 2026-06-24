@@ -31,12 +31,10 @@ export function Map() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease }}
-          className="mb-16 text-center"
+          className="mb-12"
         >
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            Projects
-          </h2>
-          <p className="mt-3 text-sm text-muted-fg/80 max-w-md mx-auto">
+          <p className="section-label mb-2">{"// projects"}</p>
+          <p className="text-sm text-muted-fg/60">
             Three systems. Two in production. One shipping.
           </p>
         </motion.div>

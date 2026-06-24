@@ -69,7 +69,7 @@ export function Thoughts() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, delay: 0.15, ease }}
-          className="rounded-xl glass-card glow-accent overflow-hidden"
+          className="rounded-xl overflow-hidden border border-border/60 bg-white/[0.025] backdrop-blur-xl shadow-[0_0_24px_hsl(var(--accent)/0.06),inset_0_1px_0_hsl(var(--accent)/0.04)]"
         >
           {/* Header bar */}
           <div className="flex items-center justify-between border-b border-border/40 bg-card/20 px-5 py-3">
@@ -105,7 +105,7 @@ export function Thoughts() {
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.04, duration: 0.4 }}
-                  className="group px-5 py-5 transition-all duration-300 hover:bg-accent/[0.02]"
+                  className="group px-5 py-5 transition-all duration-300 hover:bg-white/[0.03]"
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <span className="font-mono text-[11px] text-accent/50">{entry.date}</span>
@@ -114,7 +114,7 @@ export function Thoughts() {
                       thinking
                     </span>
                   </div>
-                  <p className="font-mono text-xs leading-[1.8] text-muted-fg/70 group-hover:text-foreground/80 transition-colors duration-300">
+                  <p className="font-mono text-xs leading-[1.8] text-muted-fg/60 group-hover:text-foreground/90 transition-colors duration-300">
                     {entry.body}
                   </p>
                 </motion.div>

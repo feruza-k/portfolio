@@ -8,17 +8,17 @@ const CARDS = [
   {
     icon: <ThinkIcon />,
     label: "How I think",
-    text: "I start with constraints before capabilities. Most AI systems fail not because the model isn't good enough, but because nobody decided what it shouldn't do. The architecture follows the constraint, not the other way around.",
+    text: "Before I think about what a system can do, I try to settle what it shouldn't get wrong. Most failures I've seen aren't a model problem. Nobody decided the constraint first. Once you've got that, the architecture mostly writes itself.",
   },
   {
     icon: <BuildIcon />,
     label: "What I'm building toward",
-    text: "Production AI systems in complex, regulated environments — the kind where the data is messy, the requirements shift, and getting it wrong has real consequences. Currently focused on the HESA Hub AI layer and Azure AI-102 (May 2026).",
+    text: "Getting a model to perform well is one problem. Making that output repeatable and reliable enough for a team to build on is a different one. That second problem is what I want to work on.",
   },
   {
     icon: <StakeIcon />,
     label: "What kind of work I want",
-    text: "Build, not just advise. Systems that get deployed and used, with real stakes attached. If the domain is chaotic and the problem is genuinely unsolved, I'm paying attention.",
+    text: "Work that gets deployed and has something real attached to it. Not a notebook that runs once. Actual decisions changing because the system exists. The harder version of that is figuring out how to make it repeatable after it works the first time.",
   },
 ];
 
@@ -52,15 +52,17 @@ export function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.8, delay: i * 0.12, ease }}
-              className="group glass-card-hover rounded-2xl p-6 sm:p-7"
+              className="group rounded-2xl p-6 sm:p-7 border border-border/60 bg-white/[0.025] backdrop-blur-xl shadow-[0_0_24px_hsl(var(--primary)/0.05),inset_0_1px_0_hsl(var(--primary)/0.04)] transition-all duration-300 hover:border-primary/30 hover:bg-white/[0.05] hover:-translate-y-0.5 hover:shadow-[0_0_36px_hsl(var(--primary)/0.10),inset_0_1px_0_hsl(var(--primary)/0.07)]"
             >
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-primary/10 bg-primary/5 text-primary transition-colors group-hover:bg-primary/10">
-                {card.icon}
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-primary/10 bg-primary/5 text-primary transition-colors group-hover:bg-primary/15">
+                  {card.icon}
+                </div>
+                <p className="font-display text-sm font-semibold tracking-tight text-foreground/80 transition-colors duration-300 group-hover:text-foreground">
+                  {card.label}
+                </p>
               </div>
-              <p className="mb-3 font-display text-sm font-semibold tracking-tight text-foreground">
-                {card.label}
-              </p>
-              <p className="text-[13px] leading-relaxed text-muted-fg/70 group-hover:text-muted-fg transition-colors duration-300">
+              <p className="text-[13px] leading-relaxed text-muted-fg/60 transition-colors duration-300 group-hover:text-foreground/80">
                 {card.text}
               </p>
             </motion.div>

@@ -200,15 +200,31 @@ Vercel AI SDK v6, Claude Sonnet 4.6, ElevenLabs.
 
 ---
 
-## RESEARCH ASSISTANT (June-July 2024)
+## RESEARCH ASSISTANT (June-August 2024)
 
-Two concurrent research assistant positions at University of Greenwich.
+Two concurrent research assistant positions at University of Greenwich,
+Tourism and Marketing Research Centre.
 
-Restaurant Inclusivity Research: scraped and integrated multi-source APIs
-(Google Places, TripAdvisor, Facebook). Built NLP pipeline with sentiment
-analysis, LDA topic modelling, SVM and MLP classification to quantify
-inclusivity themes in customer reviews. Shipped Tableau dashboards for
-non-technical stakeholders.
+Consumer Behaviour Research (Restaurant Inclusivity): analysed consumer
+behaviour across 300,000+ reviews spanning three cities and three platforms:
+Google Maps, Facebook, and TripAdvisor. Built a multi-source ingestion
+pipeline with automated translation, deduplication, and cross-platform
+normalisation. Developed a behavioural segmentation system classifying
+57,825 dietary preference instances across lifestyle, medical, and religious
+categories — applying customer microsegmentation techniques to unstructured
+review data. Built the NLP analysis pipeline using N-gram extraction to
+surface and categorise dietary vocabulary, then compared TextBlob and VADER
+sentiment scoring to assess agreement and reliability across methods.
+Presented findings through trend visualisations, time series analyses, and
+cross-city comparisons of dietary need fulfilment. Shipped Tableau dashboards
+for non-technical stakeholders. Also used LDA topic modelling, SVM and MLP
+classification to quantify inclusivity themes.
+
+This work is directly relevant to retail and consumer analytics: building a
+pipeline over a large, multi-source, messy real-world dataset, segmenting
+consumer behaviour from unstructured text, and turning it into something a
+non-technical audience can act on. That is the same problem loop as retail
+insight work.
 
 School Nutrition Research (Dr Maria Gebbels): qualitative study on primary
 school lunch programmes. Conducted interviews and focus groups, processed
@@ -243,7 +259,7 @@ Proficient: GeoPandas, Folium, spaCy, NLP pipelines, scikit-learn, pandas,
 lxml, REST API design, shadcn/ui.
 
 Currently learning: Docker, LangChain, vector databases, Azure AI Services,
-Azure AI-102 (May 2026).
+Azure AI-102 (June 2026).
 
 Deliberately not claiming: Azure OpenAI in production (planned for HESA Hub
 AI layer, not yet built).
@@ -366,7 +382,7 @@ honest demo I can think of.
 Acknowledging achievements takes real effort. I know the work is good but
 putting a title on it takes courage. Technically, the cloud. I am actively
 learning it by doing small projects and following courses, not just watching
-videos. LifeOS on Railway, the portfolio on Vercel, Azure AI-102 (May 2026).
+videos. LifeOS on Railway, the portfolio on Vercel, Azure AI-102 (June 2026).
 
 "Walk me through your thesis."
 74% of new cafes in the UK fail within five years, usually because of bad site selection. The thesis was about whether data could do that decision better. I built a framework across 4,835 London neighbourhoods to predict where a cafe has a real chance and where the rent is still below what the market should be charging. That combination is what actually matters — high success potential alone is not enough if the rent has already priced in the opportunity. The interesting finding was that public transport access dominated the model, more than demographics or foot traffic proxies. Happy to go into the methodology if that is useful.

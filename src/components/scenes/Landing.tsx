@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const SUBTITLE = "Applied AI Engineer · London";
+const SUBTITLE = "ML Engineer · Applied ML/AI · London";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -55,7 +55,7 @@ export function Landing() {
             <span className="relative inline-flex h-2 w-2 rounded-full bg-terminal-green" />
           </span>
           <span className="font-mono text-[11px] text-muted-fg tracking-wider">
-            AI Engineer — London, UK
+            ML/AI Engineer — London, UK
           </span>
         </motion.div>
 
