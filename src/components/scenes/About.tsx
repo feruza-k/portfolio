@@ -8,17 +8,17 @@ const CARDS = [
   {
     icon: <ThinkIcon />,
     label: "How I think",
-    text: "Before I think about what a system can do, I try to settle what it shouldn't get wrong. Most failures I've seen aren't a model problem. Nobody decided the constraint first. Once you've got that, the architecture mostly writes itself.",
+    text: "Most of what I build starts messy: a regulator's guidance scattered across documents, six datasets that don't share a key, a day with no shape until I give it one. I'd rather spend the first effort on structure than output.",
   },
   {
     icon: <BuildIcon />,
     label: "What I'm building toward",
-    text: "Getting a model to perform well is one problem. Making that output repeatable and reliable enough for a team to build on is a different one. That second problem is what I want to work on.",
+    text: "I've had a pipeline run clean for a cycle then break because a source changed shape, and an AI agent whose memory got worse the more I gave it, until I made it selective. Getting something to work once is easy; the real problem is making it hold up on the tenth run.",
   },
   {
     icon: <StakeIcon />,
     label: "What kind of work I want",
-    text: "Work that gets deployed and has something real attached to it. Not a notebook that runs once. Actual decisions changing because the system exists. The harder version of that is figuring out how to make it repeatable after it works the first time.",
+    text: "Pipelines and AI systems that run unattended and get trusted, not a notebook that runs once. I turned a two-week manual return into two hours, and I want to keep finding that kind of leverage.",
   },
 ];
 

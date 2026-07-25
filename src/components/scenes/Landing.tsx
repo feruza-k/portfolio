@@ -76,14 +76,14 @@ export function Landing() {
           transition={{ delay: 0.5, duration: 0.8, ease }}
           className="font-display font-semibold tracking-tight leading-[1.1] text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] max-w-4xl"
         >
-          I turn{" "}
-          <span className="gradient-text">ungoverned data</span>
+          I build{" "}
+          <span className="gradient-text">pipelines</span>
           <br />
-          into pipelines people can trust,
+          people can trust,
           <br />
-          and build{" "}
+          then{" "}
           <span className="gradient-text-primary">AI</span>
-          {" "}on top of them
+          {" "}on top
           <span className="text-primary">.</span>
         </motion.h1>
 

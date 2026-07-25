@@ -139,20 +139,11 @@ export function CaseStudies() {
                 </p>
               </div>
               <div>
-                <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-accent/50 mb-1">In progress</p>
+                <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-accent/50 mb-1">Planned</p>
                 <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
-                  LLM module on Azure OpenAI with RAG over 200+ pages of regulatory guidance. Natural-language rule queries, tolerance-request drafting, schema-change summaries. Next phase: an agent layer that updates pipeline scripts behind a review gate, generates visualisations on demand, and drives the triage loop from intent.
+                  Exploring adding an LLM layer for natural-language rule queries and tolerance-request drafting, grounded in the regulatory guidance documentation.
                 </p>
               </div>
-            </div>
-
-            {/* Tech */}
-            <div className="mt-auto pt-5 border-t border-border/30 flex flex-wrap gap-2">
-              {["Django", "React", "TypeScript", "PostgreSQL", "lxml", "Azure OpenAI", "RAG"].map((t) => (
-                <span key={t} className="border-l-2 border-border/30 pl-2 font-mono text-[10px] text-muted-fg/40">
-                  {t}
-                </span>
-              ))}
             </div>
           </div>
         </motion.article>
