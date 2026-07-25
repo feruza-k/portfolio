@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Feruza Kachkinbayeva — AI Engineer";
+export const alt = "Feruza Kachkinbayeva — Data & Analytics Engineer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -210,7 +210,7 @@ export default async function Image() {
                 letterSpacing: "0.03em",
               }}
             >
-              Applied AI Engineer · London
+              Data & Analytics Engineer · London
             </span>
           </div>
         </div>

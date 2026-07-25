@@ -24,16 +24,16 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Feruza Kachkinbayeva — AI Engineer",
+  title: "Feruza Kachkinbayeva — Data & Analytics Engineer",
   description:
-    "Applied AI Engineer in London. Building AI systems that turn complex data into decisions.",
+    "Data analyst building governed data pipelines and applied AI systems. London, UK.",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://feruza.dev"
   ),
   openGraph: {
-    title: "Feruza Kachkinbayeva — AI Engineer",
+    title: "Feruza Kachkinbayeva — Data & Analytics Engineer",
     description:
-      "Applied AI Engineer in London. Building AI systems that turn complex data into decisions.",
+      "Data analyst building governed data pipelines and applied AI systems. London, UK.",
     url: "https://feruza.dev",
     siteName: "feruza.dev",
     locale: "en_GB",
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Feruza Kachkinbayeva — AI Engineer",
+    title: "Feruza Kachkinbayeva — Data & Analytics Engineer",
     description:
-      "Applied AI Engineer in London. Building AI systems that turn complex data into decisions.",
+      "Data analyst building governed data pipelines and applied AI systems. London, UK.",
   },
 };
 

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const SUBTITLE = "ML Engineer · Applied ML/AI · London";
+const SUBTITLE = "Analytics Engineer · Data Pipelines · AI · London";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -55,7 +55,7 @@ export function Landing() {
             <span className="relative inline-flex h-2 w-2 rounded-full bg-terminal-green" />
           </span>
           <span className="font-mono text-[11px] text-muted-fg tracking-wider">
-            ML/AI Engineer — London, UK
+            Data & Analytics Engineer — London, UK
           </span>
         </motion.div>
 
@@ -76,13 +76,14 @@ export function Landing() {
           transition={{ delay: 0.5, duration: 0.8, ease }}
           className="font-display font-semibold tracking-tight leading-[1.1] text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] max-w-4xl"
         >
-          I build{" "}
-          <span className="gradient-text">AI systems</span>
+          I turn{" "}
+          <span className="gradient-text">ungoverned data</span>
           <br />
-          that turn complex data
+          into pipelines people can trust,
           <br />
-          into{" "}
-          <span className="gradient-text-primary">decisions</span>
+          and build{" "}
+          <span className="gradient-text-primary">AI</span>
+          {" "}on top of them
           <span className="text-primary">.</span>
         </motion.h1>
 
