@@ -145,6 +145,15 @@ export function CaseStudies() {
                 </p>
               </div>
             </div>
+
+            {/* Tech */}
+            <div className="mt-auto pt-5 border-t border-border/30 flex flex-wrap gap-2">
+              {["Django", "React", "TypeScript", "PostgreSQL", "lxml", "Azure OpenAI"].map((t) => (
+                <span key={t} className="border-l-2 border-border/30 pl-2 font-mono text-[10px] text-muted-fg/40">
+                  {t}
+                </span>
+              ))}
+            </div>
           </div>
         </motion.article>
 

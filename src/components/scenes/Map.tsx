@@ -24,7 +24,7 @@ export function Map() {
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(var(--primary)/0.03)_0%,transparent_60%)]" />
 
-      <div className="relative mx-auto max-w-4xl">
+      <div className="relative mx-auto max-w-5xl">
         {/* Section heading */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -34,9 +34,6 @@ export function Map() {
           className="mb-12"
         >
           <p className="section-label mb-2">{"// projects"}</p>
-          <p className="text-sm text-muted-fg/60">
-            Three systems. Two in production. One shipping.
-          </p>
         </motion.div>
 
         {/* Map project header */}
@@ -52,7 +49,7 @@ export function Map() {
               <GlobeIcon />
             </div>
             <h3 className="font-display text-lg font-semibold tracking-tight text-foreground">
-              London Café Site Intelligence
+              Location Intelligence: Cafe Site Selection
             </h3>
             <span className="flex items-center gap-1.5 rounded-md border border-accent/15 bg-accent/5 px-2.5 py-0.5">
               <AwardIcon />

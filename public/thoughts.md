@@ -1,6 +1,3 @@
-2026-07-25 · feruza-dev
-Spent an afternoon on copy. The headline said "AI systems", which is the least specific sentence on the whole site and the first thing anyone reads. Changed it to lead with pipelines and governance, because that's the order the evidence actually runs in. The interesting problem was the agent's knowledge base, not just the frontend text. If the copy says one thing and the agent says another, the site contradicts itself.
-
 2026-06-27 · grounded-ai
 Quiz endpoint's closer to a real exam now, six domains, weighted distribution, timed, results at the end. Timer was the easy part. Harder part was giving each domain its own search keywords so questions actually test that domain instead of whatever's easiest to pull from the index. Otherwise you're just testing the index, not the person.
 
@@ -11,7 +8,7 @@ Content safety checks in and out today, plus handling for when Azure OpenAI just
 Mostly AI-103 prep. Could've done plain embed-and-retrieve and called it done, added an entity extraction step instead so the retrieval query isn't just the raw question. More work upfront. Retrieval's noticeably less noisy for it.
 
 2026-05-12 · feruza-dev
-Rate limiting serverless functions with in-memory state doesn't work. Each cold start is a fresh process, so the counter resets every time. Switched to Upstash Redis sliding window. Not a big change in code, but the first time I had to think properly about what "stateless" actually means in production. State still exists, it just has to live somewhere that survives the restart.
+Built the agent with two retrieval paths: cosine similarity over pre-computed embeddings for thesis content, and a direct tool call for LSOA queries against the CSV. Could've put everything through RAG but the LSOA data is structured, specific numbers per area, and retrieval over prose chunks would've lost precision. Embeddings for the unstructured stuff, direct lookup for the structured stuff. Let the data shape pick the method.
 
 2026-05-06 · hesa-stat-returns-hub
 Rebuilt the insights tab. First pass was a dashboard, because that's the default when you're not sure what someone needs. Turns out what people actually wanted was one question answered: how far from the deadline, and what's blocking it. Smaller question than a dashboard usually answers. Better one.

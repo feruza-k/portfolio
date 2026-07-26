@@ -24,10 +24,7 @@ export function Footer() {
       >
         {/* CTA */}
         <div className="text-center">
-          <p className="font-display text-xl font-semibold text-foreground mb-2">
-            Let&apos;s build something that matters.
-          </p>
-          <p className="text-sm text-muted-fg/60">
+          <p className="font-display text-xl font-semibold text-foreground">
             Open to analytics engineering, data, and applied AI roles.
           </p>
         </div>
