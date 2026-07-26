@@ -12,7 +12,7 @@ const LINKS = [
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-border/30 py-20 px-6">
+    <footer className="relative border-t border-border/30 py-16 sm:py-20 px-6">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,hsl(var(--primary)/0.02)_0%,transparent_60%)]" />
 
       <motion.div
@@ -51,13 +51,18 @@ export function Footer() {
         </div>
 
         {/* Signature */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex flex-col items-center gap-1">
+          <div className="flex items-center gap-1.5">
+            <span className="font-mono text-[10px] text-muted-fg/25 uppercase tracking-[0.2em]">
+              Built with
+            </span>
+            <HeartIcon />
+            <span className="font-mono text-[10px] text-muted-fg/25 uppercase tracking-[0.2em]">
+              by Feruza
+            </span>
+          </div>
           <span className="font-mono text-[10px] text-muted-fg/25 uppercase tracking-[0.2em]">
-            Built with
-          </span>
-          <HeartIcon />
-          <span className="font-mono text-[10px] text-muted-fg/25 uppercase tracking-[0.2em]">
-            by Feruza — London, 2026
+            London, 2026
           </span>
         </div>
       </motion.div>

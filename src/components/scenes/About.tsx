@@ -26,11 +26,11 @@ export function About() {
   return (
     <section
       id="about"
-      className="relative py-32 px-6"
+      className="relative py-20 sm:py-28 lg:py-32 px-6"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,hsl(var(--accent)/0.03)_0%,transparent_60%)]" />
 
-      <div className="relative mx-auto max-w-4xl">
+      <div className="relative mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -44,7 +44,7 @@ export function About() {
           </h2>
         </motion.div>
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-10 md:grid-cols-3">
           {CARDS.map((card, i) => (
             <motion.div
               key={card.label}

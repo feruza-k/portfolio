@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const SUBTITLE = "Analytics Engineer · Data Pipelines · AI · London";
+const SUBTITLE = "Analytics Engineer · Data Pipelines · AI";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -55,7 +55,7 @@ export function Landing() {
             <span className="relative inline-flex h-2 w-2 rounded-full bg-terminal-green" />
           </span>
           <span className="font-mono text-[11px] text-muted-fg tracking-wider">
-            Data & Analytics Engineer — London, UK
+            Data & Analytics — London, UK
           </span>
         </motion.div>
 
@@ -76,15 +76,12 @@ export function Landing() {
           transition={{ delay: 0.5, duration: 0.8, ease }}
           className="font-display font-semibold tracking-tight leading-[1.1] text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] max-w-4xl"
         >
-          I build{" "}
-          <span className="gradient-text">pipelines</span>
+          Messy data.
           <br />
-          people can trust,
+          <span className="gradient-text">Governed pipelines.</span>
           <br />
-          then{" "}
           <span className="gradient-text-primary">AI</span>
-          {" "}on top
-          <span className="text-primary">.</span>
+          {" "}that cites its sources.
         </motion.h1>
 
         {/* Typed subtitle */}

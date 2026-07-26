@@ -20,7 +20,7 @@ export function Map() {
   return (
     <section
       id="work"
-      className="relative py-32 px-6"
+      className="relative py-20 sm:py-28 lg:py-32 px-6"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(var(--primary)/0.03)_0%,transparent_60%)]" />
 

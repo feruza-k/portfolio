@@ -6,7 +6,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export function CaseStudies() {
   return (
-    <section className="relative pb-32 px-6">
+    <section className="relative pb-20 sm:pb-28 lg:pb-32 px-6">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center_right,hsl(var(--primary)/0.02)_0%,transparent_60%)]" />
 
       <div className="relative mx-auto max-w-5xl grid gap-8 lg:grid-cols-2">

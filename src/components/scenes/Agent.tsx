@@ -556,7 +556,7 @@ export function Agent() {
   }
 
   return (
-    <section id="agent" className="relative py-32 px-6">
+    <section id="agent" className="relative py-20 sm:py-28 lg:py-32 px-6">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.04)_0%,transparent_60%)]" />
 
       <div className="relative mx-auto max-w-4xl">

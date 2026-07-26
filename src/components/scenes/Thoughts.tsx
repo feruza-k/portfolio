@@ -38,7 +38,7 @@ export function Thoughts() {
   return (
     <section
       id="thinking"
-      className="relative py-32 px-6"
+      className="relative py-20 sm:py-28 lg:py-32 px-6"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,hsl(var(--accent)/0.03)_0%,transparent_60%)]" />
 
@@ -59,7 +59,7 @@ export function Thoughts() {
             </h2>
           </div>
           <p className="text-sm text-muted-fg/80 max-w-xl leading-relaxed">
-            A commit log for thinking. Not polished — that&apos;s the point.
+            A running log of what I&apos;m building, what broke, and what I changed my mind about.
           </p>
         </motion.div>
 
@@ -114,7 +114,7 @@ export function Thoughts() {
                       thinking
                     </span>
                   </div>
-                  <p className="font-mono text-xs leading-[1.8] text-muted-fg/60 group-hover:text-foreground/90 transition-colors duration-300">
+                  <p className="font-mono text-xs leading-[1.8] text-muted-fg/75 group-hover:text-foreground/90 transition-colors duration-300">
                     {entry.body}
                   </p>
                 </motion.div>
