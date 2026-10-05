@@ -399,6 +399,17 @@ entire platform solo. The Student Return workflow is a working prototype
 now, and it just won CIO approval to become the formal build. That is what
 from scratch looks like.
 
+"Have you done A/B testing?" / "Any experience with experimentation?" / "Have you worked with growth or product teams running experiments?"
+No production A/B testing, I won't pretend otherwise. The closest I have
+is formal significance testing: comparing two rent-prediction models in my
+thesis and using ANOVA to confirm the difference was real, p < 0.05, not
+noise. I did something similar comparing TextBlob against VADER sentiment
+scoring on the same 300,000+ reviews to see where they agreed and where
+they didn't. I also build in consistency checks before trusting a result,
+the AHP weighting in my thesis carries a formal consistency ratio for
+exactly that reason. Happy to talk through how I'd approach a real
+experiment if that's useful.
+
 ---
 
 ## CONTACT

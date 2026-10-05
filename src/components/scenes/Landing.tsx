@@ -55,7 +55,7 @@ export function Landing() {
             <span className="relative inline-flex h-2 w-2 rounded-full bg-terminal-green" />
           </span>
           <span className="font-mono text-[11px] text-muted-fg tracking-wider">
-            Data & Analytics — London, UK
+            Data Science & Analytics — London, UK
           </span>
         </motion.div>
 

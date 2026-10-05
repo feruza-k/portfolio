@@ -18,7 +18,7 @@ const CARDS = [
   {
     icon: <StakeIcon />,
     label: "What kind of work I want",
-    text: "Pipelines and AI systems that run unattended and get trusted, not a notebook that runs once. I turned a two-week manual return into two hours, and I want to keep finding that kind of leverage.",
+    text: "Work where the output changes a decision, not a pipeline that just runs quietly. I turned a two-week manual return into two hours, and the business noticed the saved time, not the code behind it. I want more of that: analysis a non-technical room can act on, not just run.",
   },
 ];
 

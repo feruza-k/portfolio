@@ -89,12 +89,84 @@ export function CaseStudies() {
           </div>
         </motion.article>
 
-        {/* HESA */}
+        {/* Consumer Behaviour Research */}
         <motion.article
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8, delay: 0.1, ease }}
+          className="group relative rounded-2xl overflow-hidden lg:col-span-2 border border-border/60 bg-white/[0.025] backdrop-blur-xl shadow-[0_0_28px_hsl(var(--primary)/0.05),inset_0_1px_0_hsl(var(--primary)/0.04)] transition-all duration-300 hover:border-primary/25 hover:bg-white/[0.045] hover:-translate-y-0.5"
+        >
+          <div className="h-1 bg-gradient-to-r from-accent/30 via-accent/20 to-accent/0" />
+
+          <div className="p-6 sm:p-8 flex flex-col h-full">
+            {/* Meta row */}
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-card/80 text-accent border border-border/50">
+                  <UsersIcon />
+                </div>
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-fg/60">
+                  University of Greenwich · Research Assistant · Jun-Aug 2024
+                </span>
+              </div>
+              <span className="font-mono text-[10px] text-terminal-green/80">300K+ reviews analysed</span>
+            </div>
+
+            {/* Title */}
+            <h3 className="font-display text-xl font-semibold text-foreground mb-7">
+              Consumer Behaviour Research · Restaurant Inclusivity
+            </h3>
+
+            {/* Content — two-column on large screens */}
+            <div className="grid gap-5 lg:grid-cols-2 text-[13px] leading-relaxed flex-1">
+              <div className="space-y-5">
+                <div>
+                  <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-accent/50 mb-1">Problem</p>
+                  <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
+                    Restaurant inclusivity research usually runs on small samples or a single review platform. Dietary-need signals, allergy, religious, lifestyle, sit scattered across Google Maps, Facebook and TripAdvisor as free text, across three cities, with no shared structure.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-accent/50 mb-1">What it does</p>
+                  <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
+                    Built a multi-source ingestion pipeline across 300,000+ reviews with automated translation, deduplication and cross-platform normalisation. Classified 57,825 dietary-preference instances into lifestyle, medical and religious segments, the same microsegmentation logic consumer-insight teams run on customer data, applied here to review text.
+                  </p>
+                </div>
+              </div>
+              <div className="space-y-5">
+                <div>
+                  <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-accent/50 mb-1">Key finding</p>
+                  <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
+                    Compared TextBlob against VADER sentiment scoring on the same text before trusting either one, then used N-gram extraction and LDA topic modelling to surface the dietary vocabulary underneath. Shipped as Tableau dashboards for non-technical stakeholders: the analysis only mattered once someone who had never touched the raw data could read it and decide something.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-mono text-[10px] font-medium uppercase tracking-wider text-accent/50 mb-1">Scale</p>
+                  <p className="text-muted-fg/80 text-justify transition-colors duration-300 group-hover:text-foreground/85">
+                    Two concurrent research-assistant positions at Greenwich&apos;s Tourism and Marketing Research Centre. A parallel qualitative study from the same period, on school nutrition, went on to win Best Paper at CHME Conference 2025.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Tech */}
+            <div className="mt-auto pt-5 border-t border-border/30 flex flex-wrap gap-2">
+              {["Python", "TextBlob", "VADER", "LDA", "Tableau", "NLP"].map((t) => (
+                <span key={t} className="border-l-2 border-border/30 pl-2 font-mono text-[10px] text-muted-fg/40">
+                  {t}
+                </span>
+              ))}
+            </div>
+          </div>
+        </motion.article>
+
+        {/* HESA */}
+        <motion.article
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8, delay: 0.2, ease }}
           className="group relative rounded-2xl overflow-hidden border border-border/60 bg-white/[0.025] backdrop-blur-xl shadow-[0_0_28px_hsl(var(--primary)/0.05),inset_0_1px_0_hsl(var(--primary)/0.04)] transition-all duration-300 hover:border-primary/25 hover:bg-white/[0.045] hover:-translate-y-0.5"
         >
           <div className="h-1 bg-gradient-to-r from-primary/30 to-primary/0" />
@@ -156,7 +228,7 @@ export function CaseStudies() {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.8, delay: 0.2, ease }}
+          transition={{ duration: 0.8, delay: 0.3, ease }}
           className="group relative rounded-2xl overflow-hidden border border-border/60 bg-white/[0.025] backdrop-blur-xl shadow-[0_0_28px_hsl(var(--primary)/0.05),inset_0_1px_0_hsl(var(--primary)/0.04)] transition-all duration-300 hover:border-primary/25 hover:bg-white/[0.045] hover:-translate-y-0.5"
         >
           <div className="h-1 bg-gradient-to-r from-accent/20 to-accent/0" />
@@ -236,6 +308,9 @@ function AwardIcon() {
 }
 function ArrowUpRightIcon() {
   return <svg width="10" height="10" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M5 15L15 5M15 5H8M15 5v7"/></svg>;
+}
+function UsersIcon() {
+  return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
 }
 function MapPinIcon() {
   return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>;
