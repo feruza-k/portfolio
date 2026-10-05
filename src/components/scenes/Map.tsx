@@ -85,7 +85,7 @@ export function Map() {
             <span className="text-foreground/90">12 site-suitability factors</span>{" "}
             (footfall potential, competition density, transport access, and demographics)
             into a single opportunity score per LSOA. Consistency ratio:{" "}
-            <span className="text-foreground/90 font-mono">0.06</span>.
+            <span className="text-foreground/90 font-mono">0.069</span>.
           </p>
           <div className="flex gap-3 shrink-0">
             <a

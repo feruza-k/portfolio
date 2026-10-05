@@ -44,7 +44,7 @@ Picked Django before writing anything else. This is a governance tool before it'
 LifeOS shipped in 31 days. Learned working and right aren't the same thing the hard way, the retrieval scoring was fast, it worked, it wasn't right. Shipped it anyway. Not saying slow down next time, saying know what you're actually optimising for before you start, because I didn't and it showed.
 
 2024-10-28 · london-cafe-location-intelligence
-AHP consistency ratio for the café model came in at 0.06. Threshold is 0.10. Genuinely surprised by that, when you're weighting something as messy as commercial viability, getting that far under the threshold means the logic actually holds together, not just the numbers. Mattered more to me than the prize did.
+AHP consistency ratio for the café model came in at 0.069. Threshold is 0.10. Genuinely surprised by that, when you're weighting something as messy as commercial viability, getting that far under the threshold means the logic actually holds together, not just the numbers. Mattered more to me than the prize did.
 
 2024-08-02 · london-cafe-location-intelligence
 Hardest part of the thesis wasn't the ML accuracy, it was finding the right data. Took about half the project. Footfall is one of the strongest predictors of whether a new business survives, but per-LSOA footfall data costs real money and I didn't have it. Scraped every amenity I could find across London instead, restaurants, hotels, cinemas, theatres, museums, mapped it all to LSOAs, used amenity density as a stand-in. It held up. Sometimes the data you need doesn't exist and you build a signal from what does.

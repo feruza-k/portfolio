@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const SUBTITLE = "Analytics Engineer · Data Pipelines · AI";
+const SUBTITLE = "Data Science · Analytics · Applied AI";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 

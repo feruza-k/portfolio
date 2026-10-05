@@ -24,14 +24,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Feruza Kachkinbayeva — Data & Analytics Engineer",
+  title: "Feruza Kachkinbayeva | Data Science & Analytics",
   description:
     "Data analyst building governed data pipelines and applied AI systems. London, UK.",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://feruza.dev"
   ),
   openGraph: {
-    title: "Feruza Kachkinbayeva — Data & Analytics Engineer",
+    title: "Feruza Kachkinbayeva | Data Science & Analytics",
     description:
       "Data analyst building governed data pipelines and applied AI systems. London, UK.",
     url: "https://feruza.dev",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Feruza Kachkinbayeva — Data & Analytics Engineer",
+    title: "Feruza Kachkinbayeva | Data Science & Analytics",
     description:
       "Data analyst building governed data pipelines and applied AI systems. London, UK.",
   },

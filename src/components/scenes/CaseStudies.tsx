@@ -110,19 +110,13 @@ export function CaseStudies() {
                   University of Greenwich
                 </span>
               </div>
-              <span className="font-mono text-[10px] text-terminal-green/80">Feature-complete</span>
+              <span className="font-mono text-[10px] text-terminal-green/80">Prototype · CIO-approved for build</span>
             </div>
 
-            {/* Title + award */}
-            <h3 className="font-display text-xl font-semibold text-foreground mb-1">
+            {/* Title */}
+            <h3 className="font-display text-xl font-semibold text-foreground mb-7">
               HESA Stat Returns Hub
             </h3>
-            <div className="flex items-center gap-1.5 mb-7">
-              <AwardIcon />
-              <span className="font-mono text-[10px] text-accent/80">
-                CFO Staff Recognition Award 2025 · Efficiency and Innovation
-              </span>
-            </div>
 
             {/* Content */}
             <div className="space-y-5 text-[13px] leading-relaxed flex-1">
@@ -148,7 +142,7 @@ export function CaseStudies() {
 
             {/* Tech */}
             <div className="mt-auto pt-5 border-t border-border/30 flex flex-wrap gap-2">
-              {["Django", "React", "TypeScript", "PostgreSQL", "lxml", "Azure OpenAI"].map((t) => (
+              {["Django", "React", "TypeScript", "PostgreSQL", "lxml"].map((t) => (
                 <span key={t} className="border-l-2 border-border/30 pl-2 font-mono text-[10px] text-muted-fg/40">
                   {t}
                 </span>

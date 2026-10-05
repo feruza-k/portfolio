@@ -25,7 +25,7 @@ export function Footer() {
         {/* CTA */}
         <div className="text-center">
           <p className="font-display text-xl font-semibold text-foreground">
-            Open to analytics engineering, data, and applied AI roles.
+            Open to data science, analytics and applied AI roles.
           </p>
         </div>
 
